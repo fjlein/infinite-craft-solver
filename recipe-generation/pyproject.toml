@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "infinite-craft-solver"
+version = "0.1.0"
+description = ""
+authors = ["Felix Lein <fjlein@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fake-useragent = "^1.4.0"
+requests = "^2.31.0"
+pymongo = "^4.6.1"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
