@@ -57,9 +57,11 @@
 			<p class="mb-1 text-xs text-gray-600 uppercase">Elements discovered</p>
 			<div class="flex items-center space-x-2">
 				<div
-					class="w-2 h-2 rounded-full {$name == 'Running'
-						? 'animate-pulse bg-green-500'
-						: 'bg-red-500'}"
+					class="w-2 h-2 rounded-full {$name == 'Loading'
+						? 'bg-gray-500'
+						: $name == 'Running'
+							? 'animate-pulse bg-green-500'
+							: ' bg-red-500'}"
 				></div>
 				<p class="font-medium">{$elements_formatted}</p>
 			</div>
@@ -68,9 +70,11 @@
 			<p class="mb-1 text-xs text-gray-600 uppercase">Resolved Recipes</p>
 			<div class="flex items-center space-x-2">
 				<div
-					class="w-2 h-2 rounded-full {$name == 'Running'
-						? 'animate-pulse bg-green-500'
-						: 'bg-red-500'}"
+					class="w-2 h-2 rounded-full {$name == 'Loading'
+						? 'bg-gray-500'
+						: $name == 'Running'
+							? 'animate-pulse bg-green-500'
+							: ' bg-red-500'}"
 				></div>
 				<p class="font-medium">{$resolved_formatted}</p>
 			</div>
@@ -79,9 +83,11 @@
 			<p class="mb-1 text-xs text-gray-600 uppercase">Queued Recipes</p>
 			<div class="flex items-center space-x-2">
 				<div
-					class="w-2 h-2 rounded-full {$name == 'Running'
-						? 'animate-pulse bg-green-500'
-						: 'bg-red-500'}"
+					class="w-2 h-2 rounded-full {$name == 'Loading'
+						? 'bg-gray-500'
+						: $name == 'Running'
+							? 'animate-pulse bg-green-500'
+							: ' bg-red-500'}"
 				></div>
 				<p class="font-medium">{$queued_formatted}</p>
 			</div>
