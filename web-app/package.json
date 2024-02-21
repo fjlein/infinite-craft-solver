@@ -36,8 +36,15 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fontsource/geist-sans": "^5.0.1",
+		"bits-ui": "^0.18.1",
+		"clsx": "^2.1.0",
+		"cmdk-sv": "^0.0.13",
 		"lucide-svelte": "^0.335.0",
 		"luxon": "^3.4.4",
-		"mongodb": "^6.3.0"
+		"mongodb": "^6.3.0",
+		"svelte-radix": "^1.0.1",
+		"tailwind-merge": "^2.2.1",
+		"tailwind-variants": "^0.2.0"
 	}
 }

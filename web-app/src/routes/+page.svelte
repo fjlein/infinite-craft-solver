@@ -1,96 +1,105 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import Input from '$lib/components/ui/input/input.svelte';
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
-	import { tweened } from 'svelte/motion';
-	import { derived } from 'svelte/store';
-	import { cubicOut } from 'svelte/easing';
+	import StatusBar from './status-bar.svelte';
 
-	export const name = writable<string>('Loading');
+	let search = $page.url.searchParams.get('q') || '';
+	let elements: { name: string; emoji: string }[] = [];
+	let timeout: number | undefined;
+	let searching = false;
 
-	let resolved = tweened(0, { duration: 5000, easing: cubicOut });
-	let resolved_formatted = derived(resolved, ($myNumber) => $myNumber.toFixed());
+	function handle_search() {
+		// if (timeout) clearTimeout(timeout);
+		// timeout = setTimeout(get_products, 100);
+		goto(`?q=${search}`);
+	}
 
-	let queued = tweened(0, { duration: 5000, easing: cubicOut });
-	let queued_formatted = derived(queued, ($myNumber) => $myNumber.toFixed());
-
-	let elements = tweened(0, { duration: 5000, easing: cubicOut });
-	let elements_formatted = derived(elements, ($myNumber) => $myNumber.toFixed());
-
-	onMount(() => {
-		async function fetchStatus() {
-			const s = await fetch('/api/status').then((x) => x.json());
-			resolved.set(s.resolved);
-			queued.set(s.queued);
-			elements.set(s.elements);
-			name.set(s.name);
-			setTimeout(fetchStatus, 5000);
+	async function get_products() {
+		if (!search) {
+			reset();
+			return;
 		}
 
-		fetchStatus();
+		searching = true;
+
+		const data = await fetch('/api/elements?q=' + search).then((res) => {
+			return res.json();
+		});
+		elements = data ?? [];
+		searching = false;
+	}
+
+	function reset() {
+		elements = [];
+		search = '';
+		searching = false;
+	}
+
+	afterNavigate(() => {
+		search = $page.url.searchParams.get('q') || '';
+		get_products();
 	});
 </script>
 
-<div class="grid min-h-screen place-items-center">
-	<div
-		class="grid p-4 border rounded-md grid-cols-2 md:grid-cols-4 gap-5 md:gap-x-10 justify-start md:place-items-center {$name ==
-		'Loading'
-			? 'border-gray-500 bg-gray-50'
-			: $name == 'Running'
-				? 'border-green-500 bg-green-50'
-				: 'border-red-500 bg-red-50'}"
-	>
-		<div class="flex flex-col">
-			<p class="mb-1 text-xs text-gray-600 uppercase">Current status</p>
-			<div class="flex items-center space-x-2">
-				<div
-					class="w-2 h-2 rounded-full {$name == 'Loading'
-						? 'bg-gray-500'
-						: $name == 'Running'
-							? 'animate-pulse bg-green-500'
-							: ' bg-red-500'}"
-				></div>
-				<p class="font-medium">{$name}</p>
-			</div>
-		</div>
-		<div class="flex flex-col">
-			<p class="mb-1 text-xs text-gray-600 uppercase">Elements discovered</p>
-			<div class="flex items-center space-x-2">
-				<div
-					class="w-2 h-2 rounded-full {$name == 'Loading'
-						? 'bg-gray-500'
-						: $name == 'Running'
-							? 'animate-pulse bg-green-500'
-							: ' bg-red-500'}"
-				></div>
-				<p class="font-medium">{$elements_formatted}</p>
-			</div>
-		</div>
-		<div class="flex flex-col">
-			<p class="mb-1 text-xs text-gray-600 uppercase">Resolved Recipes</p>
-			<div class="flex items-center space-x-2">
-				<div
-					class="w-2 h-2 rounded-full {$name == 'Loading'
-						? 'bg-gray-500'
-						: $name == 'Running'
-							? 'animate-pulse bg-green-500'
-							: ' bg-red-500'}"
-				></div>
-				<p class="font-medium">{$resolved_formatted}</p>
-			</div>
-		</div>
-		<div class="flex flex-col">
-			<p class="mb-1 text-xs text-gray-600 uppercase">Queued Recipes</p>
-			<div class="flex items-center space-x-2">
-				<div
-					class="w-2 h-2 rounded-full {$name == 'Loading'
-						? 'bg-gray-500'
-						: $name == 'Running'
-							? 'animate-pulse bg-green-500'
-							: ' bg-red-500'}"
-				></div>
-				<p class="font-medium">{$queued_formatted}</p>
-			</div>
-		</div>
+<div>
+	<div class="mb-1">
+		<a class="text-4xl font-semibold" href="/"> <h1>Infinite Craft Solver</h1></a>
 	</div>
+
+	<p class="mb-5 text-muted-foreground">
+		Find the shortest crafting path in
+		<a class="text-blue-600 hover:underline" href="https://neal.fun/infinite-craft"
+			>Infinite Craft</a
+		>.
+	</p>
+
+	<Input
+		placeholder=""
+		bind:value={search}
+		on:input={handle_search}
+		class="h-[34px]"
+		autofocus
+		autocomplete="false"
+	></Input>
+
+	{#if elements.length == 0}
+		<div class="flex flex-wrap gap-2 my-2">
+			<button
+				class="px-2 py-1 border rounded-md shadow-sm"
+				on:click={() => {
+					search = 'Dog';
+					handle_search();
+				}}>Search 🐶</button
+			>
+			<button
+				class="px-2 py-1 border rounded-md shadow-sm"
+				on:click={() => {
+					search = 'Cat';
+					handle_search();
+				}}>Search 🐈</button
+			>
+			<button
+				class="px-2 py-1 border rounded-md shadow-sm"
+				on:click={() => {
+					search = 'Sun';
+					handle_search();
+				}}>Search ☀️</button
+			>
+		</div>
+	{/if}
+
+	<div class="flex flex-wrap gap-2 my-2">
+		{#each elements as element}
+			<a class="px-2 py-1 border rounded-md shadow-sm" href={'/path/' + element.name}>
+				{element.emoji}
+				{element.name}
+			</a>
+		{/each}
+	</div>
+</div>
+
+<div class="mt-10 justify-self-end">
+	<StatusBar></StatusBar>
 </div>
