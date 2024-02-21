@@ -29,9 +29,10 @@
 	});
 </script>
 
-<div class="grid h-64 place-items-center">
+<div class="grid min-h-screen place-items-center">
 	<div
-		class="flex p-4 space-x-10 border rounded-md {$status.name == 'Running'
+		class="flex p-4 md:space-x-10 border rounded-md md:flex-row flex-col space-y-5 md:space-y-0 {$status.name ==
+		'Running'
 			? 'border-green-500 bg-green-50'
 			: 'border-red-500 bg-red-50'}"
 	>
