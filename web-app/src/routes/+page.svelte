@@ -55,17 +55,24 @@
 		>.
 	</p>
 
-	<Input
-		placeholder=""
-		bind:value={search}
-		on:input={handle_search}
-		class="h-[34px]"
-		autofocus
-		autocomplete="false"
-	></Input>
+	<div class="flex flex-row space-x-2">
+		<Input
+			placeholder="Dog, Firetruck, ..."
+			bind:value={search}
+			on:input={handle_search}
+			class="h-[34px]"
+			autofocus
+			autocomplete="false"
+		></Input>
+		{#if search != ''}
+			<button class="px-2 py-1 border rounded-md shadow-sm shrink-0" on:click={() => goto('/')}
+				>❌</button
+			>
+		{/if}
+	</div>
 
 	{#if elements.length == 0}
-		<div class="flex flex-wrap gap-2 my-2">
+		<div class="flex flex-wrap gap-2 my-2 font-medium">
 			<button
 				class="px-2 py-1 border rounded-md shadow-sm"
 				on:click={() => {
@@ -83,7 +90,7 @@
 			<button
 				class="px-2 py-1 border rounded-md shadow-sm"
 				on:click={() => {
-					search = 'Sun';
+					search = 'Sunbathing';
 					handle_search();
 				}}>Search ☀️</button
 			>
@@ -92,7 +99,7 @@
 
 	<div class="flex flex-wrap gap-2 my-2">
 		{#each elements as element}
-			<a class="px-2 py-1 border rounded-md shadow-sm" href={'/path/' + element.name}>
+			<a class="px-2 py-1 font-medium border rounded-md shadow-sm" href={'/path/' + element.name}>
 				{element.emoji}
 				{element.name}
 			</a>

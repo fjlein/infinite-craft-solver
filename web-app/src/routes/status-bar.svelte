@@ -31,15 +31,10 @@
 </script>
 
 <div
-	class="grid p-4 border rounded-md grid-cols-2 md:grid-cols-4 gap-5 md:gap-x-10 justify-start md:place-items-center w-full shadow-sm {$name ==
-	'Loading'
-		? 'bg-gray-50'
-		: $name == 'Running'
-			? ' bg-green-50'
-			: ' bg-red-50'}"
+	class="grid justify-start w-full grid-cols-2 gap-5 p-4 border rounded-md shadow-sm md:grid-cols-4 md:gap-x-5 md:place-items-center"
 >
 	<div class="flex flex-col">
-		<p class="mb-1 text-xs uppercase text-muted-foreground">Current status</p>
+		<p class="mb-1 text-muted-foreground">Worker Status</p>
 		<div class="flex items-center space-x-2">
 			<div
 				class="w-2 h-2 rounded-full {$name == 'Loading'
@@ -52,7 +47,7 @@
 		</div>
 	</div>
 	<div class="flex flex-col">
-		<p class="mb-1 text-xs uppercase text-muted-foreground">Elements found</p>
+		<p class="mb-1 text-muted-foreground">Elements Found</p>
 		<div class="flex items-center space-x-2">
 			<div
 				class="w-2 h-2 rounded-full {$name == 'Loading'
@@ -65,7 +60,7 @@
 		</div>
 	</div>
 	<div class="flex flex-col">
-		<p class="mb-1 text-xs uppercase text-muted-foreground">Resolved Recipes</p>
+		<p class="mb-1 text-muted-foreground">Resolved Recipes</p>
 		<div class="flex items-center space-x-2">
 			<div
 				class="w-2 h-2 rounded-full {$name == 'Loading'
@@ -78,7 +73,7 @@
 		</div>
 	</div>
 	<div class="flex flex-col">
-		<p class="mb-1 text-xs uppercase text-muted-foreground">Queued Recipes</p>
+		<p class="mb-1 text-muted-foreground">Queued Recipes</p>
 		<div class="flex items-center space-x-2">
 			<div
 				class="w-2 h-2 rounded-full {$name == 'Loading'
