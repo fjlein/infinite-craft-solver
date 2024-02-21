@@ -5,7 +5,7 @@ The python code in this folder resolves recipes and stores them in a database.
 ## Setup
 
 1. Install dependencies with `poetry install`
-2. Create `.env` with `cp .env.example .env` and add your MongoDB url.
+2. Create `.env` with `cp .env.example .env` and add your MongoDB uri.
 3. Initiate the database with `reset.py`
 
 ## Run

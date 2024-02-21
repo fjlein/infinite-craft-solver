@@ -4,7 +4,7 @@ import os
 
 load_dotenv()
 
-CONNECTION_STRING = os.getenv("APP_MONGO_URL")
+CONNECTION_STRING = os.getenv("MONGODB_URI")
 
 client = MongoClient(CONNECTION_STRING)
 
