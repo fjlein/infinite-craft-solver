@@ -25,7 +25,7 @@
 	}
 
 	onMount(() => {
-		const interval = setInterval(fetchStatus, 1);
+		const interval = setInterval(fetchStatus, 3000);
 	});
 </script>
 
