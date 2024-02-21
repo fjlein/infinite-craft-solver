@@ -35,7 +35,7 @@ def create_new_recipes():
 
     db.recipes.insert_many(new_recipes)
 
-    logging.info("Created %s new recipes", len(new_recipes))
+    logging.info("Created %s new recipes with %s", len(new_recipes), new_element)
 
 
 while True:
@@ -48,7 +48,7 @@ while True:
     )
 
     if recipe == None:
-        logging.info("0 unsolved recipes found, creating new ones")
+        logging.info("0 unresolved recipes found")
         create_new_recipes()
         continue
 
