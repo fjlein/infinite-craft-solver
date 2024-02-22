@@ -2,17 +2,34 @@
 	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import { onMount } from 'svelte';
 	import StatusBar from './status-bar.svelte';
+
+	const debounce = (mainFunction: any, delay: number | undefined) => {
+		// Declare a variable called 'timer' to store the timer ID
+		let timer: number | undefined;
+
+		// Return an anonymous function that takes in any number of arguments
+		return function (...args: any) {
+			// Clear the previous timer to prevent the execution of 'mainFunction'
+			clearTimeout(timer);
+
+			searching = true;
+
+			// Set a new timer that will execute 'mainFunction' after the specified delay
+			timer = setTimeout(() => {
+				mainFunction(...args);
+			}, delay);
+		};
+	};
 
 	let search = $page.url.searchParams.get('q') || '';
 	let elements: { name: string; emoji: string }[] = [];
-	let timeout: number | undefined;
 	let searching = false;
 
 	function handle_search() {
 		// if (timeout) clearTimeout(timeout);
 		// timeout = setTimeout(get_products, 100);
+		searching = true;
 		goto(`?q=${search}`);
 	}
 
@@ -21,8 +38,6 @@
 			reset();
 			return;
 		}
-
-		searching = true;
 
 		const data = await fetch('/api/elements?q=' + search).then((res) => {
 			return res.json();
@@ -59,15 +74,14 @@
 		<Input
 			placeholder="Dog, Firetruck, ..."
 			bind:value={search}
-			on:input={handle_search}
+			on:input={debounce(handle_search, 1000)}
 			class="h-[34px]"
-			autofocus
 			autocomplete="false"
 		></Input>
 		{#if search != ''}
-			<button class="px-2 py-1 border rounded-md shadow-sm shrink-0" on:click={() => goto('/')}
-				>❌</button
-			>
+			<button class="px-2 py-1 border rounded-md shadow-sm shrink-0" on:click={() => goto('/')}>
+				<p class={searching ? 'animate-spin' : ''}>❌</p>
+			</button>
 		{/if}
 	</div>
 
