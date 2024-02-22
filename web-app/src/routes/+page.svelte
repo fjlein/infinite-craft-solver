@@ -2,7 +2,9 @@
 	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import StatusBar from './status-bar.svelte';
+	import { beforeUpdate, onMount } from 'svelte';
+
+	import _ from 'lodash';
 
 	const debounce = (mainFunction: any, delay: number | undefined) => {
 		// Declare a variable called 'timer' to store the timer ID
@@ -22,18 +24,17 @@
 		};
 	};
 
-	let search = $page.url.searchParams.get('q') || '';
+	$: search = '';
+	$: query = $page.url.searchParams.get('q') || '';
 	let elements: { name: string; emoji: string }[] = [];
 	let searching = false;
 
 	function handle_search() {
-		// if (timeout) clearTimeout(timeout);
-		// timeout = setTimeout(get_products, 100);
-		searching = true;
-		goto(`?q=${search}`);
+		goto(`?q=${search}`, { replaceState: true });
 	}
 
 	async function get_products() {
+		searching = true;
 		if (!search) {
 			reset();
 			return;
@@ -49,78 +50,67 @@
 	function reset() {
 		elements = [];
 		search = '';
-		searching = false;
 	}
 
 	afterNavigate(() => {
-		search = $page.url.searchParams.get('q') || '';
+		search = query;
 		get_products();
 	});
 </script>
 
-<div>
-	<div class="mb-1">
-		<a class="text-4xl font-semibold" href="/"> <h1>Infinite Craft Solver</h1></a>
-	</div>
-
-	<p class="mb-5 text-muted-foreground">
-		Find the shortest crafting path in
-		<a class="text-blue-600 hover:underline" href="https://neal.fun/infinite-craft"
-			>Infinite Craft</a
-		>.
-	</p>
-
-	<div class="flex flex-row space-x-2">
-		<Input
-			placeholder="Dog, Firetruck, ..."
-			bind:value={search}
-			on:input={debounce(handle_search, 1000)}
-			class="h-[34px]"
-			autocomplete="false"
-		></Input>
-		{#if search != ''}
-			<button class="px-2 py-1 border rounded-md shadow-sm shrink-0" on:click={() => goto('/')}>
-				<p class={searching ? 'animate-spin' : ''}>❌</p>
-			</button>
-		{/if}
-	</div>
-
-	{#if elements.length == 0}
-		<div class="flex flex-wrap gap-2 my-2 font-medium">
-			<button
-				class="px-2 py-1 border rounded-md shadow-sm"
-				on:click={() => {
-					search = 'Dog';
-					handle_search();
-				}}>Search 🐶</button
-			>
-			<button
-				class="px-2 py-1 border rounded-md shadow-sm"
-				on:click={() => {
-					search = 'Cat';
-					handle_search();
-				}}>Search 🐈</button
-			>
-			<button
-				class="px-2 py-1 border rounded-md shadow-sm"
-				on:click={() => {
-					search = 'Sunbathing';
-					handle_search();
-				}}>Search ☀️</button
-			>
-		</div>
-	{/if}
-
-	<div class="flex flex-wrap gap-2 my-2">
-		{#each elements as element}
-			<a class="px-2 py-1 font-medium border rounded-md shadow-sm" href={'/path/' + element.name}>
-				{element.emoji}
-				{element.name}
-			</a>
-		{/each}
-	</div>
+<div class="mb-1 md:mt-10">
+	<a class="text-4xl font-semibold" href="/"> <h1>Infinite Craft Solver</h1></a>
 </div>
 
-<div class="mt-10 justify-self-end">
-	<StatusBar></StatusBar>
+<p class="mb-5 text-muted-foreground">
+	Find the shortest recipe in
+	<a class="underline hover:no-underline" href="https://neal.fun/infinite-craft">Infinite Craft</a>.
+</p>
+
+<div class="flex flex-row space-x-2">
+	<Input
+		placeholder="Search..."
+		bind:value={search}
+		on:input={debounce(handle_search, 1000)}
+		class="h-[34px] text-base"
+		autocomplete="false"
+	></Input>
+	{#if search != ''}
+		<button class="px-2 py-1 border rounded-md shadow-sm shrink-0" on:click={() => goto('/')}>
+			<p class={searching ? 'animate-spin' : ''}>❌</p>
+		</button>
+	{/if}
+</div>
+
+{#if elements.length == 0}
+	<div class="flex flex-wrap gap-2 my-2 font-medium">
+		<button
+			class="px-2 py-1 border rounded-md shadow-sm"
+			on:click={() => {
+				goto('?q=' + _.sample(['Dog', 'Cat', 'Sun', 'Cactus', 'Fire', 'Car']), {
+					replaceState: true
+				});
+			}}>✨ Random Search</button
+		>
+
+		{#if !searching && query != ''}
+			<button
+				class="px-2 py-1 border rounded-md shadow-sm"
+				on:click={() => {
+					goto('?q=' + _.sample(['Dog', 'Cat', 'Sun', 'Cactus', 'Fire', 'Car']), {
+						replaceState: true
+					});
+				}}>😭 No Results</button
+			>
+		{/if}
+	</div>
+{/if}
+
+<div class="flex flex-wrap gap-2 my-2">
+	{#each elements as element}
+		<a class="px-2 py-1 font-medium border rounded-md shadow-sm" href={'/recipe/' + element.name}>
+			{element.emoji}
+			{element.name}
+		</a>
+	{/each}
 </div>

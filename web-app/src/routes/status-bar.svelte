@@ -8,13 +8,19 @@
 	export const name = writable<string>('Loading');
 
 	let resolved = tweened(0, { duration: 5000, easing: cubicOut });
-	let resolved_formatted = derived(resolved, ($myNumber) => $myNumber.toFixed());
+	let resolved_formatted = derived(resolved, ($myNumber) =>
+		$myNumber.toLocaleString(undefined, { maximumFractionDigits: 0 })
+	);
 
 	let queued = tweened(0, { duration: 5000, easing: cubicOut });
-	let queued_formatted = derived(queued, ($myNumber) => $myNumber.toFixed());
+	let queued_formatted = derived(queued, ($myNumber) =>
+		$myNumber.toLocaleString(undefined, { maximumFractionDigits: 0 })
+	);
 
 	let elements = tweened(0, { duration: 5000, easing: cubicOut });
-	let elements_formatted = derived(elements, ($myNumber) => $myNumber.toFixed());
+	let elements_formatted = derived(elements, ($myNumber) =>
+		$myNumber.toLocaleString(undefined, { maximumFractionDigits: 0 })
+	);
 
 	onMount(() => {
 		async function fetchStatus() {
