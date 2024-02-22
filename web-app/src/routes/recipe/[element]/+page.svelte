@@ -5,7 +5,7 @@
 
 	export let data: PageData;
 
-	let promise = getTree();
+	let promise: Promise<any> = getTree();
 
 	async function getTree() {
 		const res = await fetch(`/api/elements/${data.element.name}/recipe`);
@@ -25,7 +25,7 @@
 
 <div class="flex flex-row justify-between space-x-2 font-medium md:mt-10">
 	<button class="px-2 py-1 border rounded-md shadow-sm shrink-0" on:click={() => goto('/')}>
-		⬅️ Go Back
+		⬅️ Search
 	</button>
 	<button
 		class="px-2 py-1 border rounded-md shadow-sm shrink-0"
@@ -58,3 +58,5 @@
 {:catch error}
 	<p style="color: red">{JSON.stringify(error.message, null, 4)}</p>
 {/await}
+
+<!-- <Graph></Graph> -->
