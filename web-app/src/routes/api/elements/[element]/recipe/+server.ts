@@ -14,12 +14,36 @@ export const GET: RequestHandler = async ({ params }) => {
 		});
 	}
 
-	return json({
-		element: {
-			name: element.result.name,
-			emoji: element.result.emoji
+	const tree = await getTree(element.result.name);
+
+	async function getTree(element: string): Promise<unknown> {
+		const recipe = await collection.findOne(
+			{ 'result.name': element },
+			{ sort: ['result.explored', 'asc'] }
+		);
+
+		if (!recipe) {
+			error(404, {
+				message: 'Not found'
+			});
 		}
-	});
+
+		if (['Fire', 'Water', 'Earth', 'Wind'].includes(recipe.result.name)) {
+			return { name: recipe.result.name, emoji: recipe.result.emoji };
+		} else {
+			const first = recipe!.first;
+			const second = recipe!.second;
+
+			return {
+				name: recipe.result.name,
+				emoji: recipe.result.emoji,
+				first: await getTree(first),
+				second: await getTree(second)
+			};
+		}
+	}
+
+	return json(tree);
 };
 
 // function recursiveSearch(recipe: any, collection: any) {

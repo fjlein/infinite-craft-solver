@@ -45,7 +45,7 @@
 				classes = 'bg-orange-500 animate-pulse';
 				break;
 			case 'Stopped':
-				classes = 'bg-red-500 animate-pulse';
+				classes = 'bg-red-500';
 				break;
 			default:
 				classes = 'bg-gray-500';
