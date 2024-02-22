@@ -34,6 +34,24 @@
 
 		fetchStatus();
 	});
+
+	let classes = '';
+	$: {
+		switch ($name) {
+			case 'Running':
+				classes = 'bg-green-500 animate-pulse';
+				break;
+			case 'Waiting':
+				classes = 'bg-orange-500 animate-pulse';
+				break;
+			case 'Stopped':
+				classes = 'bg-red-500 animate-pulse';
+				break;
+			default:
+				classes = 'bg-gray-500';
+				break;
+		}
+	}
 </script>
 
 <div
@@ -42,52 +60,28 @@
 	<div class="flex flex-col">
 		<p class="mb-1 text-muted-foreground">Worker Status</p>
 		<div class="flex items-center space-x-2">
-			<div
-				class="w-2 h-2 rounded-full {$name == 'Loading'
-					? 'bg-gray-500'
-					: $name == 'Running'
-						? 'animate-pulse bg-green-500'
-						: ' bg-red-500'}"
-			></div>
+			<div class="w-2 h-2 rounded-full {classes}"></div>
 			<p class="font-medium">{$name}</p>
 		</div>
 	</div>
 	<div class="flex flex-col">
 		<p class="mb-1 text-muted-foreground">Elements Found</p>
 		<div class="flex items-center space-x-2">
-			<div
-				class="w-2 h-2 rounded-full {$name == 'Loading'
-					? 'bg-gray-500'
-					: $name == 'Running'
-						? 'animate-pulse bg-green-500'
-						: ' bg-red-500'}"
-			></div>
+			<div class="w-2 h-2 rounded-full {classes}"></div>
 			<p class="font-medium">{$elements_formatted}</p>
 		</div>
 	</div>
 	<div class="flex flex-col">
 		<p class="mb-1 text-muted-foreground">Resolved Recipes</p>
 		<div class="flex items-center space-x-2">
-			<div
-				class="w-2 h-2 rounded-full {$name == 'Loading'
-					? 'bg-gray-500'
-					: $name == 'Running'
-						? 'animate-pulse bg-green-500'
-						: ' bg-red-500'}"
-			></div>
+			<div class="w-2 h-2 rounded-full {classes}"></div>
 			<p class="font-medium">{$resolved_formatted}</p>
 		</div>
 	</div>
 	<div class="flex flex-col">
 		<p class="mb-1 text-muted-foreground">Queued Recipes</p>
 		<div class="flex items-center space-x-2">
-			<div
-				class="w-2 h-2 rounded-full {$name == 'Loading'
-					? 'bg-gray-500'
-					: $name == 'Running'
-						? 'animate-pulse bg-green-500'
-						: ' bg-red-500'}"
-			></div>
+			<div class="w-2 h-2 rounded-full {classes}"></div>
 			<p class="font-medium">{$queued_formatted}</p>
 		</div>
 	</div>

@@ -22,7 +22,11 @@ export const GET: RequestHandler = async () => {
 
 		const diff = now.diff(last_resolve_time);
 
-		if (diff.toMillis() < 1000) {
+		if (diff.toMillis() > 1000 * 60 * 10) {
+			name = 'Stopped';
+		} else if (diff.toMillis() > 1000 * 10) {
+			name = 'Waiting';
+		} else {
 			name = 'Running';
 		}
 	}
