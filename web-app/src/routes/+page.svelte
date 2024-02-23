@@ -92,7 +92,7 @@
 			>
 		{:else}
 			<button class="px-2 py-1 border rounded-md shadow-sm bg-white" on:click={() => goto('/about')}
-				>❓ Get more info</button
+				>❓ Get More Info</button
 			>
 		{/if}
 
@@ -109,10 +109,7 @@
 
 <div class="flex flex-wrap gap-2 my-2">
 	{#each elements as element}
-		<a
-			class="px-2 py-1 font-medium border rounded-md shadow-sm bg-white"
-			href={'/recipe/' + element.name}
-		>
+		<a class="px-2 py-1 font-medium border rounded-md shadow-sm bg-white" href={element.name}>
 			{element.emoji}
 			{element.name}
 		</a>

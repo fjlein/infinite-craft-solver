@@ -8,11 +8,14 @@
 </script>
 
 <div class="flex flex-row justify-between space-x-2 font-medium">
-	<button class="px-2 py-1 border rounded-md shadow-sm shrink-0" on:click={() => goto('/')}>
+	<button
+		class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white"
+		on:click={() => goto('/')}
+	>
 		⬅️ Search
 	</button>
 	<button
-		class="px-2 py-1 border rounded-md shadow-sm shrink-0"
+		class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white"
 		on:click={() => alert('Coming soon!')}
 	>
 		🔀
