@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { Button } from '$lib/components/ui/button';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import { beforeUpdate, onMount } from 'svelte';
+	import * as Popover from '$lib/components/ui/popover';
 
 	import _ from 'lodash';
 
@@ -59,13 +60,10 @@
 </script>
 
 <div class="mb-1 md:mt-10">
-	<a class="text-4xl font-semibold" href="/"> <h1>Infinite Craft Solver</h1></a>
+	<h1 class="text-4xl font-semibold">Infinite Craft Solver</h1>
 </div>
 
-<p class="mb-5 text-muted-foreground">
-	Find the shortest recipe in
-	<a class="underline hover:no-underline" href="https://neal.fun/infinite-craft">Infinite Craft</a>.
-</p>
+<p class="mb-5 text-muted-foreground">Find the shortest recipe in Infinite Craft.</p>
 
 <div class="flex flex-row space-x-2">
 	<Input
@@ -84,6 +82,15 @@
 
 {#if elements.length == 0}
 	<div class="flex flex-wrap gap-2 my-2 font-medium">
+		{#if !searching && query != ''}
+			<Popover.Root>
+				<Popover.Trigger asChild let:builder>
+					<Button variant="ics" builders={[builder]}>😭 No Results</Button>
+				</Popover.Trigger>
+				<Popover.Content>Try to refine your search query.</Popover.Content>
+			</Popover.Root>
+		{/if}
+
 		<button
 			class="px-2 py-1 border rounded-md shadow-sm"
 			on:click={() => {
@@ -93,16 +100,12 @@
 			}}>✨ Random Search</button
 		>
 
-		{#if !searching && query != ''}
-			<button
-				class="px-2 py-1 border rounded-md shadow-sm"
-				on:click={() => {
-					goto('?q=' + _.sample(['Dog', 'Cat', 'Sun', 'Cactus', 'Fire', 'Car']), {
-						replaceState: true
-					});
-				}}>😭 No Results</button
-			>
-		{/if}
+		<Popover.Root>
+			<Popover.Trigger asChild let:builder>
+				<Button variant="ics" builders={[builder]}>❓ Get more info</Button>
+			</Popover.Trigger>
+			<Popover.Content>Coming Soon</Popover.Content>
+		</Popover.Root>
 	</div>
 {/if}
 
