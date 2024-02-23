@@ -23,16 +23,15 @@
 	});
 </script>
 
-<div class="flex flex-row justify-between space-x-2 font-medium md:mt-10">
+<div class="flex flex-row justify-between space-x-2 font-medium">
 	<button class="px-2 py-1 border rounded-md shadow-sm shrink-0" on:click={() => goto('/')}>
 		⬅️ Search
 	</button>
 	<button
 		class="px-2 py-1 border rounded-md shadow-sm shrink-0"
-		on:click={() => goto('/')}
-		disabled
+		on:click={() => alert('Coming soon!')}
 	>
-		Random ➡️
+		🔀
 	</button>
 </div>
 

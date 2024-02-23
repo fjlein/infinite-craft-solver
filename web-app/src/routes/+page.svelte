@@ -49,6 +49,7 @@
 	}
 
 	function reset() {
+		searching = false;
 		elements = [];
 		search = '';
 	}
@@ -58,12 +59,6 @@
 		get_products();
 	});
 </script>
-
-<div class="mb-1 md:mt-10">
-	<h1 class="text-4xl font-semibold">Infinite Craft Solver</h1>
-</div>
-
-<p class="mb-5 text-muted-foreground">Find the shortest recipe in Infinite Craft.</p>
 
 <div class="flex flex-row space-x-2">
 	<Input
@@ -78,17 +73,24 @@
 			<p class={searching ? 'animate-spin' : ''}>❌</p>
 		</button>
 	{/if}
+	<button
+		class="px-2 py-1 border rounded-md shadow-sm shrink-0 font-medium"
+		on:click={() => alert('Coming soon!')}
+	>
+		🔀
+	</button>
 </div>
 
-{#if elements.length == 0}
+{#if elements.length == 0 && !searching}
 	<div class="flex flex-wrap gap-2 my-2 font-medium">
-		{#if !searching && query != ''}
-			<Popover.Root>
-				<Popover.Trigger asChild let:builder>
-					<Button variant="ics" builders={[builder]}>😭 No Results</Button>
-				</Popover.Trigger>
-				<Popover.Content>Try to refine your search query.</Popover.Content>
-			</Popover.Root>
+		{#if query != ''}
+			<button class="px-2 py-1 border rounded-md shadow-sm" on:click={() => goto('/about')}
+				>😭 No Results</button
+			>
+		{:else}
+			<button class="px-2 py-1 border rounded-md shadow-sm" on:click={() => goto('/about')}
+				>❓ Get more info</button
+			>
 		{/if}
 
 		<button
@@ -99,13 +101,6 @@
 				});
 			}}>✨ Random Search</button
 		>
-
-		<Popover.Root>
-			<Popover.Trigger asChild let:builder>
-				<Button variant="ics" builders={[builder]}>❓ Get more info</Button>
-			</Popover.Trigger>
-			<Popover.Content>Coming Soon</Popover.Content>
-		</Popover.Root>
 	</div>
 {/if}
 
