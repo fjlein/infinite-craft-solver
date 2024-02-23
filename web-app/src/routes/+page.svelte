@@ -65,16 +65,19 @@
 		placeholder="Search..."
 		bind:value={search}
 		on:input={debounce(handle_search, 1000)}
-		class="h-[34px] text-base"
+		class="h-[34px] text-base bg-white"
 		autocomplete="false"
 	></Input>
 	{#if search != ''}
-		<button class="px-2 py-1 border rounded-md shadow-sm shrink-0" on:click={() => goto('/')}>
+		<button
+			class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white"
+			on:click={() => goto('/')}
+		>
 			<p class={searching ? 'animate-spin' : ''}>❌</p>
 		</button>
 	{/if}
 	<button
-		class="px-2 py-1 border rounded-md shadow-sm shrink-0 font-medium"
+		class="px-2 py-1 border rounded-md shadow-sm shrink-0 font-medium bg-white"
 		on:click={() => alert('Coming soon!')}
 	>
 		🔀
@@ -84,17 +87,17 @@
 {#if elements.length == 0 && !searching}
 	<div class="flex flex-wrap gap-2 my-2 font-medium">
 		{#if query != ''}
-			<button class="px-2 py-1 border rounded-md shadow-sm" on:click={() => goto('/about')}
+			<button class="px-2 py-1 border rounded-md shadow-sm bg-white" on:click={() => goto('/about')}
 				>😭 No Results</button
 			>
 		{:else}
-			<button class="px-2 py-1 border rounded-md shadow-sm" on:click={() => goto('/about')}
+			<button class="px-2 py-1 border rounded-md shadow-sm bg-white" on:click={() => goto('/about')}
 				>❓ Get more info</button
 			>
 		{/if}
 
 		<button
-			class="px-2 py-1 border rounded-md shadow-sm"
+			class="px-2 py-1 border rounded-md shadow-sm bg-white"
 			on:click={() => {
 				goto('?q=' + _.sample(['Dog', 'Cat', 'Sun', 'Cactus', 'Fire', 'Car']), {
 					replaceState: true
@@ -106,7 +109,10 @@
 
 <div class="flex flex-wrap gap-2 my-2">
 	{#each elements as element}
-		<a class="px-2 py-1 font-medium border rounded-md shadow-sm" href={'/recipe/' + element.name}>
+		<a
+			class="px-2 py-1 font-medium border rounded-md shadow-sm bg-white"
+			href={'/recipe/' + element.name}
+		>
 			{element.emoji}
 			{element.name}
 		</a>
@@ -114,7 +120,7 @@
 
 	{#if elements.length == 100}
 		<button
-			class="px-2 py-1 border rounded-md shadow-sm font-medium"
+			class="px-2 py-1 border rounded-md shadow-sm font-medium bg-white"
 			on:click={() => goto('/about')}>➕ Many more...</button
 		>
 	{/if}

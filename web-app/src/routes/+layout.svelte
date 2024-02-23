@@ -3,8 +3,11 @@
 	import StatusBar from './status-bar.svelte';
 </script>
 
+<div
+	class="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"
+></div>
 <div class="max-w-2xl px-4 mx-auto">
-	<div class=" flex flex-col justify-between min-h-[100vh]">
+	<div class="flex flex-col justify-between min-h-[100vh]">
 		<div class="mt-10">
 			<div class="mb-1 md:mt-10">
 				<h1 class="text-4xl font-semibold">Infinite Craft Solver</h1>
@@ -26,8 +29,8 @@
 
 	<div class="h-[10vh]">
 		<p class="text-muted-foreground text-center">
-			Made by with ❤️ by <a href="https://github.com/fjlein" class="underline underline-offset-4"
-				>@fjlein</a
+			Made with ❤️ by <a href="https://github.com/fjlein" class="underline underline-offset-4"
+				>fjlein</a
 			>
 		</p>
 	</div>

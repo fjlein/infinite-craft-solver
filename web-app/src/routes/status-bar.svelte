@@ -55,7 +55,7 @@
 </script>
 
 <div
-	class="grid justify-start w-full grid-cols-2 gap-5 p-4 border rounded-md shadow-sm md:grid-cols-4 md:gap-x-5 md:place-items-center"
+	class="grid justify-start w-full grid-cols-2 gap-5 p-4 border rounded-md shadow-sm md:grid-cols-4 md:gap-x-5 md:place-items-center bg-white"
 >
 	<div class="flex flex-col">
 		<p class="mb-1 text-muted-foreground">Worker Status</p>
