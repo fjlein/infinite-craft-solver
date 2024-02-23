@@ -16,21 +16,19 @@ logging.basicConfig(filename="logging.log", filemode="w", level=logging.DEBUG)
 def create_new_recipes():
     logging.info("Starting recipe creation")
     known_elements = db.recipes.distinct("first")
-
+    
     new_element = db.recipes.find_one(
         filter={
-            "$and": [
-                {"result.name": {"$nin": known_elements}},
-                {"result.name": {"$ne": "Nothing"}},
-            ]
+            "result.name": {"$nin": [e["name"] for e in known_elements]},
         },
         sort=[("result.explored", pymongo.ASCENDING)],
-    )["result"]["name"]
+        projection={"result.name": True, "result.emoji": True, "_id": False}
+    )["result"]
 
     new_recipes = [{"first": new_element, "second": new_element}]
 
     for element in known_elements:
-        first, second = sorted([element, new_element])
+        first, second = sorted([element, new_element], key=lambda x: x["name"])
         new_recipes.append({"first": first, "second": second})
 
     db.recipes.insert_many(new_recipes)
@@ -47,14 +45,18 @@ while True:
         sort=[("first", pymongo.ASCENDING), ("second", pymongo.ASCENDING)],
     )
 
+    # print(recipe)
+    # print(recipe["first"])
+    # print(recipe["first"]["name"])
+
     if recipe == None:
         logging.info("0 unresolved recipes found")
         create_new_recipes()
         continue
 
-    logging.info("Crafting %s + %s", recipe["first"], recipe["second"])
+    logging.info("Crafting %s + %s", recipe["first"]["name"], recipe["second"]["name"])
 
-    url = f"https://neal.fun/api/infinite-craft/pair?first={recipe['first']}&second={recipe['second']}"
+    url = f"https://neal.fun/api/infinite-craft/pair?first={recipe['first']['name']}&second={recipe['second']['name']}"
     headers = {"referer": "https://neal.fun/infinite-craft/", "User-Agent": ua.random}
 
     try:
@@ -82,7 +84,7 @@ while True:
                 "result": {
                     "name": content["result"],
                     "emoji": content["emoji"],
-                    "explored": datetime.datetime.utcnow(),
+                    "explored": datetime.datetime.now(datetime.UTC),
                 }
             }
         },

@@ -15,7 +15,8 @@ starting_elements = [
 combinations = list(combinations_with_replacement(starting_elements, 2))
 
 for c in combinations:
-    f, s = sorted([e["name"] for e in c])
+    f, s = sorted(c, key=lambda x: x["name"])
+    print(f, s)
     db.recipes.insert_one(
         {
             "first": f,
