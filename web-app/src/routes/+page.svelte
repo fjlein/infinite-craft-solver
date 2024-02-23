@@ -111,4 +111,11 @@
 			{element.name}
 		</a>
 	{/each}
+
+	{#if elements.length == 100}
+		<button
+			class="px-2 py-1 border rounded-md shadow-sm font-medium"
+			on:click={() => goto('/about')}>➕ Many more...</button
+		>
+	{/if}
 </div>

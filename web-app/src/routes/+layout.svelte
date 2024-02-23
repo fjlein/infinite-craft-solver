@@ -3,17 +3,32 @@
 	import StatusBar from './status-bar.svelte';
 </script>
 
-<div class="max-w-2xl min-h-[90vh] px-4 py-10 mx-auto flex flex-col justify-between">
-	<div>
-		<div class="mb-1 md:mt-10">
-			<h1 class="text-4xl font-semibold">Infinite Craft Solver</h1>
+<div class="max-w-2xl px-4 mx-auto">
+	<div class=" flex flex-col justify-between min-h-[100vh]">
+		<div class="mt-10">
+			<div class="mb-1 md:mt-10">
+				<h1 class="text-4xl font-semibold">Infinite Craft Solver</h1>
+			</div>
+
+			<p class="mb-5 text-muted-foreground">
+				Find the shortest recipe in <a
+					href="https://neal.fun/infinite-craft"
+					class="underline underline-offset-4">Infinite Craft</a
+				>.
+			</p>
+			<slot />
 		</div>
 
-		<p class="mb-5 text-muted-foreground">Find the shortest recipe in Infinite Craft.</p>
-		<slot />
+		<div class="mb-20 mt-10">
+			<StatusBar></StatusBar>
+		</div>
 	</div>
 
-	<div class="mt-10 justify-self-end">
-		<StatusBar></StatusBar>
+	<div class="h-[10vh]">
+		<p class="text-muted-foreground text-center">
+			Made by with ❤️ by <a href="https://github.com/fjlein" class="underline underline-offset-4"
+				>@fjlein</a
+			>
+		</p>
 	</div>
 </div>
