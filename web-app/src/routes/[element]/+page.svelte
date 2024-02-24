@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { goto, invalidate, invalidateAll } from '$app/navigation';
+	import { afterNavigate, goto, invalidate, invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import _ from 'lodash';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 
@@ -20,11 +21,6 @@
 			emoji: string;
 		};
 	}
-
-	let recipes: Recipe[];
-	$: recipes = [];
-
-	let toResolve: string[] = [data.element.name];
 
 	async function getRecipe(name: string) {
 		const res = await fetch(`/api/elements/${name}/recipe`);
@@ -50,7 +46,14 @@
 		}
 	}
 
-	onMount(() => {
+	let recipes: Recipe[];
+	$: recipes = [];
+
+	let toResolve: string[];
+
+	afterNavigate(() => {
+		recipes = [];
+		toResolve = [data.element.name];
 		resolveRecipes();
 	});
 </script>
@@ -64,7 +67,7 @@
 	</button>
 	<button
 		class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white"
-		on:click={() => goto('/').then(() => goto('/random'))}
+		on:click={() => goto('/random')}
 	>
 		🔀
 	</button>

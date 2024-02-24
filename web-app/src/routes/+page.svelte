@@ -54,9 +54,14 @@
 		search = '';
 	}
 
-	afterNavigate(() => {
+	let random_element: string;
+
+	afterNavigate(async () => {
 		search = query;
 		get_products();
+
+		const res = await fetch('/api/elements/random');
+		random_element = (await res.json()).name;
 	});
 </script>
 
@@ -99,9 +104,7 @@
 		<button
 			class="px-2 py-1 border rounded-md shadow-sm bg-white"
 			on:click={async () => {
-				const res = await fetch('/api/elements/random');
-				const element = await res.json();
-				goto('?q=' + element.name.substr(0, Math.floor(element.name.length / 2)), {
+				goto('?q=' + random_element.substring(0, Math.floor(random_element.length / 2)), {
 					replaceState: true
 				});
 			}}>✨ Random Search</button
