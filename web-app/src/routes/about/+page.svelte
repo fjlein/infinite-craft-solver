@@ -22,7 +22,7 @@
 	</button>
 </div>
 
-<Accordion.Root class="w-full bg-white border rounded-md mt-10 px-2 shadow-sm">
+<Accordion.Root class="w-full bg-white border rounded-md mt-10 px-2 shadow-sm divide-y">
 	<Accordion.Item value="item-1">
 		<Accordion.Trigger>🤨 Is it accessible?</Accordion.Trigger>
 		<Accordion.Content>Yes. It adheres to the WAI-ARIA design pattern.</Accordion.Content>

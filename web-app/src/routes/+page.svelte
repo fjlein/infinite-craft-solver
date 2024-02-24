@@ -83,7 +83,7 @@
 	{/if}
 	<button
 		class="px-2 py-1 border rounded-md shadow-sm shrink-0 font-medium bg-white"
-		on:click={async () => goto('/random')}
+		on:click={async () => goto(`/${random_element}`)}
 	>
 		🔀
 	</button>
