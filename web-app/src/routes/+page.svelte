@@ -75,14 +75,14 @@
 	></Input>
 	{#if search != ''}
 		<button
-			class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white"
+			class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white hover:bg-slate-50 active:shadow-none"
 			on:click={() => goto('/')}
 		>
 			<p class={searching ? 'animate-spin' : ''}>❌</p>
 		</button>
 	{/if}
 	<button
-		class="px-2 py-1 border rounded-md shadow-sm shrink-0 font-medium bg-white"
+		class="px-2 py-1 border rounded-md shadow-sm shrink-0 font-medium bg-white hover:bg-slate-50 active:shadow-none"
 		on:click={async () => goto(`/${random_element}`)}
 	>
 		🔀
@@ -92,17 +92,19 @@
 {#if elements.length == 0 && !searching}
 	<div class="flex flex-wrap gap-2 my-2 font-medium">
 		{#if query != ''}
-			<button class="px-2 py-1 border rounded-md shadow-sm bg-white" on:click={() => goto('/about')}
-				>😭 No Results</button
+			<button
+				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+				on:click={() => goto('/about')}>😭 No Results</button
 			>
 		{:else}
-			<button class="px-2 py-1 border rounded-md shadow-sm bg-white" on:click={() => goto('/about')}
-				>❓ Get More Info</button
+			<button
+				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+				on:click={() => goto('/about')}>❓ Get More Info</button
 			>
 		{/if}
 
 		<button
-			class="px-2 py-1 border rounded-md shadow-sm bg-white"
+			class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
 			on:click={async () => {
 				goto('?q=' + random_element.substring(0, Math.floor(random_element.length / 2)), {
 					replaceState: true
@@ -114,7 +116,10 @@
 
 <div class="flex flex-wrap gap-2 my-2">
 	{#each elements as element}
-		<a class="px-2 py-1 font-medium border rounded-md shadow-sm bg-white" href={element.name}>
+		<a
+			class="px-2 py-1 font-medium border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+			href={element.name}
+		>
 			{element.emoji}
 			{element.name}
 		</a>
@@ -122,7 +127,7 @@
 
 	{#if elements.length == 100}
 		<button
-			class="px-2 py-1 border rounded-md shadow-sm font-medium bg-white"
+			class="px-2 py-1 border rounded-md shadow-sm font-medium bg-white hover:bg-slate-50 active:shadow-none"
 			on:click={() => goto('/about')}>➕ Many more...</button
 		>
 	{/if}
