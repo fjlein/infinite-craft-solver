@@ -21,6 +21,6 @@
 		on:click
 	>
 		<slot />
-		<div class="transition-transform duration-200 mx-2">⬇️</div>
+		<div class="transition-transform duration-200">⬇️</div>
 	</AccordionPrimitive.Trigger>
 </AccordionPrimitive.Header>

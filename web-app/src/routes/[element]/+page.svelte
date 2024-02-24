@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidate, invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import _ from 'lodash';
@@ -64,7 +64,7 @@
 	</button>
 	<button
 		class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white"
-		on:click={() => alert('Coming soon!')}
+		on:click={() => goto('/').then(() => goto('/random'))}
 	>
 		🔀
 	</button>

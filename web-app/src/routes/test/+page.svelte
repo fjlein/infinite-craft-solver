@@ -1,26 +1,37 @@
-<script lang="ts">
-	import type { PageData } from './$types';
-	import Force from './force.svelte';
+<script>
+	import { onMount } from 'svelte';
+	import * as d3 from 'd3';
+	var data = [30, 86, 168, 281, 303, 365];
 
-	const numberOfDots = 100;
-	let dots = new Array(numberOfDots).fill(0).map((_) => ({}));
+	/**
+	 * @type {HTMLDivElement}
+	 */
+	let el;
 
-	import { forceX, forceY, forceCollide, forceRadial } from 'd3-force';
-	let centerPosition = [200, 200];
-	let useForceCollide = true;
-	let useForceRadial = true;
-	$: activeForceX = forceX().x(centerPosition[0]);
-	$: activeForceY = forceY().y(centerPosition[1]);
-	$: activeForceCollide = forceCollide().radius(10).iterations(3);
-	$: activeForceRadial = forceRadial(150, centerPosition[0], centerPosition[1]);
-	$: forces = [
-		['x', activeForceX],
-		['y', activeForceY],
-		useForceCollide && ['collide', activeForceCollide],
-		useForceRadial && ['radial', activeForceRadial]
-	].filter((d) => d);
-
-	export let data: PageData;
+	onMount(() => {
+		d3.select(el)
+			.selectAll('div')
+			.data(data)
+			.enter()
+			.append('div')
+			.style('width', function (d) {
+				return d + 'px';
+			})
+			.text(function (d) {
+				return d;
+			});
+	});
 </script>
 
-<Force {forces} {dots} />
+<div bind:this={el} class="chart"></div>
+
+<style>
+	.chart :global(div) {
+		font: 10px sans-serif;
+		background-color: steelblue;
+		text-align: right;
+		padding: 3px;
+		margin: 1px;
+		color: white;
+	}
+</style>

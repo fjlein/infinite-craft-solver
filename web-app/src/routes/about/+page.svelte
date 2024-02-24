@@ -16,25 +16,25 @@
 	</button>
 	<button
 		class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white"
-		on:click={() => alert('Coming soon!')}
+		on:click={() => goto('/random')}
 	>
 		🔀
 	</button>
 </div>
 
-<Accordion.Root class="w-full mt-5">
+<Accordion.Root class="w-full bg-white border rounded-md mt-10 px-2 shadow-sm">
 	<Accordion.Item value="item-1">
-		<Accordion.Trigger>Is it accessible?</Accordion.Trigger>
+		<Accordion.Trigger>🤨 Is it accessible?</Accordion.Trigger>
 		<Accordion.Content>Yes. It adheres to the WAI-ARIA design pattern.</Accordion.Content>
 	</Accordion.Item>
 	<Accordion.Item value="item-2">
-		<Accordion.Trigger>Is it styled?</Accordion.Trigger>
+		<Accordion.Trigger>🤓 Is it styled?</Accordion.Trigger>
 		<Accordion.Content>
 			Yes. It comes with default styles that matches the other components' aesthetic.
 		</Accordion.Content>
 	</Accordion.Item>
 	<Accordion.Item value="item-3">
-		<Accordion.Trigger>Is it animated?</Accordion.Trigger>
+		<Accordion.Trigger>🥺 Is it animated?</Accordion.Trigger>
 		<Accordion.Content>
 			Yes. It's animated by default, but you can disable it if you prefer.
 		</Accordion.Content>

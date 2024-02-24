@@ -78,7 +78,7 @@
 	{/if}
 	<button
 		class="px-2 py-1 border rounded-md shadow-sm shrink-0 font-medium bg-white"
-		on:click={() => alert('Coming soon!')}
+		on:click={async () => goto('/random')}
 	>
 		🔀
 	</button>
@@ -98,8 +98,10 @@
 
 		<button
 			class="px-2 py-1 border rounded-md shadow-sm bg-white"
-			on:click={() => {
-				goto('?q=' + _.sample(['Dog', 'Cat', 'Sun', 'Cactus', 'Fire', 'Car']), {
+			on:click={async () => {
+				const res = await fetch('/api/elements/random');
+				const element = await res.json();
+				goto('?q=' + element.name.substr(0, Math.floor(element.name.length / 2)), {
 					replaceState: true
 				});
 			}}>✨ Random Search</button
