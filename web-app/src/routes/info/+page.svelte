@@ -22,7 +22,7 @@
 	</button>
 </div>
 
-<Accordion.Root class="w-full bg-white border rounded-md mt-2 px-2 shadow-sm divide-y">
+<Accordion.Root class="w-full bg-white border rounded-md mt-2 px-2 shadow-sm divide-y" multiple>
 	<Accordion.Item value="item-1">
 		<Accordion.Trigger>🌍 Who created Infinite Craft?</Accordion.Trigger>
 		<Accordion.Content
@@ -48,7 +48,19 @@
 		</Accordion.Content>
 	</Accordion.Item>
 	<Accordion.Item value="item-3">
-		<Accordion.Trigger>😭 Why does it say many more...?</Accordion.Trigger>
+		<Accordion.Trigger>🙈 Why do it get no results?</Accordion.Trigger>
+		<Accordion.Content>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a purus nibh. Nunc felis
+			metus, ultrices ut risus eget, aliquet rhoncus ex. Suspendisse a dui a eros mollis efficitur
+			lobortis sit amet massa. Pellentesque consectetur nunc erat, nec blandit urna aliquam at.
+			Vivamus vestibulum pellentesque scelerisque. Ut tempor risus non sapien elementum laoreet.
+			Donec ut leo justo. Pellentesque quis leo eget erat cursus dignissim a vel risus. Mauris vel
+			arcu sodales, finibus lacus ut, ornare justo. Fusce facilisis cursus leo, id dapibus justo
+			faucibus eget.
+		</Accordion.Content>
+	</Accordion.Item>
+	<Accordion.Item value="item-4">
+		<Accordion.Trigger>😭 Why only 100 elements in search?</Accordion.Trigger>
 		<Accordion.Content>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a purus nibh. Nunc felis
 			metus, ultrices ut risus eget, aliquet rhoncus ex. Suspendisse a dui a eros mollis efficitur

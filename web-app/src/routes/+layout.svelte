@@ -3,14 +3,14 @@
 	import StatusBar from './status-bar.svelte';
 </script>
 
-<div class="max-w-2xl px-4 mx-auto relative">
+<div class="max-w-2xl relative mx-auto">
 	<div
-		class="-z-10 absolute h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"
+		class="-z-10 absolute w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"
 	></div>
-	<div class="flex flex-col justify-between min-h-[100vh]">
+	<div class="flex flex-col justify-between min-h-[100vh] mx-4">
 		<div class="mt-10">
 			<div class="mb-1 md:mt-10">
-				<h1 class="text-4xl font-semibold">Infinite Craft Solver</h1>
+				<h1 class="text-4xl font-semibold"><a href="/">Infinite Craft Solver</a></h1>
 			</div>
 
 			<p class="mb-5 text-muted-foreground">
