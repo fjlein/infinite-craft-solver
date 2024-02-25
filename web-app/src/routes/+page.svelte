@@ -6,6 +6,7 @@
 	import * as Popover from '$lib/components/ui/popover';
 
 	import _ from 'lodash';
+	import { onMount } from 'svelte';
 
 	const debounce = (mainFunction: any, delay: number | undefined) => {
 		// Declare a variable called 'timer' to store the timer ID
@@ -34,7 +35,7 @@
 		goto(`?q=${search}`, { replaceState: true });
 	}
 
-	async function get_products() {
+	async function get_elements() {
 		searching = true;
 		if (!search) {
 			reset();
@@ -56,12 +57,21 @@
 
 	let random_element: string;
 
-	afterNavigate(async () => {
-		search = query;
-		get_products();
-
+	async function setRandomElement() {
 		const res = await fetch('/api/elements/random');
 		random_element = (await res.json()).name;
+		console.log(random_element);
+	}
+
+	onMount(async () => {
+		setRandomElement();
+	});
+
+	afterNavigate(async () => {
+		search = query;
+		get_elements();
+
+		setRandomElement();
 	});
 </script>
 
@@ -94,18 +104,21 @@
 		{#if query != ''}
 			<button
 				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-				on:click={() => goto('/about')}>😭 No Results</button
+				on:click={() => goto('/info')}>😭 No Results</button
 			>
 		{:else}
 			<button
 				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-				on:click={() => goto('/about')}>❓ Get More Info</button
+				on:click={() => goto('/info')}>❓ Get More Info</button
 			>
 		{/if}
 
 		<button
 			class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
 			on:click={async () => {
+				if (!random_element) {
+					setRandomElement();
+				}
 				goto('?q=' + random_element.substring(0, Math.floor(random_element.length / 2)), {
 					replaceState: true
 				});
