@@ -3,11 +3,10 @@
 	import StatusBar from './status-bar.svelte';
 </script>
 
-<div
-	class="-z-10 fixed h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"
-></div>
-
-<div class="max-w-2xl px-4 mx-auto">
+<div class="max-w-2xl px-4 mx-auto relative">
+	<div
+		class="-z-10 absolute h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"
+	></div>
 	<div class="flex flex-col justify-between min-h-[100vh]">
 		<div class="mt-10">
 			<div class="mb-1 md:mt-10">

@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
+	import { afterNavigate, beforeNavigate, goto, invalidate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { Button } from '$lib/components/ui/button';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { fade, scale } from 'svelte/transition';
 
 	import _ from 'lodash';
-	import { onMount } from 'svelte';
+	import Button from '$lib/components/mine/button.svelte';
 
 	const debounce = (mainFunction: any, delay: number | undefined) => {
 		// Declare a variable called 'timer' to store the timer ID
@@ -17,8 +16,6 @@
 			// Clear the previous timer to prevent the execution of 'mainFunction'
 			clearTimeout(timer);
 
-			searching = true;
-
 			// Set a new timer that will execute 'mainFunction' after the specified delay
 			timer = setTimeout(() => {
 				mainFunction(...args);
@@ -26,53 +23,49 @@
 		};
 	};
 
+	let search: string;
 	$: search = '';
-	$: query = $page.url.searchParams.get('q') || '';
+	let random_element: string | null = null;
+	let query: string | null = null;
 	let elements: { name: string; emoji: string }[] = [];
-	let searching = false;
-
-	function handle_search() {
-		goto(`?q=${search}`, { replaceState: true });
-	}
+	let noResults: boolean = false;
 
 	async function get_elements() {
-		searching = true;
-		if (!search) {
-			reset();
+		console.log('getting');
+		if (search == '') {
+			elements = [];
+			search = '';
+			noResults = false;
 			return;
 		}
 
-		const data = await fetch('/api/elements?q=' + search).then((res) => {
-			return res.json();
-		});
-		elements = data ?? [];
-		searching = false;
+		const res = await fetch('/api/elements?q=' + search);
+		elements = await res.json();
+		if (elements.length == 0) {
+			noResults = true;
+		}
 	}
 
-	function reset() {
-		searching = false;
-		elements = [];
-		search = '';
-		random_element = null;
-	}
-
-	let random_element: string | null = null;
-
-	async function setRandomElement() {
+	async function getRandomElement() {
 		const res = await fetch('/api/elements/random');
 		random_element = (await res.json()).name;
-		console.log(random_element);
 	}
 
-	onMount(async () => {
-		setRandomElement();
+	function getRandomSearchQuery(): string {
+		const q = (random_element ?? '').split(' ')[0];
+		return q.substring(0, Math.floor(q.length / 2));
+	}
+
+	beforeNavigate(() => {
+		random_element = null;
 	});
 
-	afterNavigate(async () => {
-		search = query;
-		get_elements();
+	afterNavigate(() => {
+		query = $page.url.searchParams.get('q');
+		search = query ?? '';
 
-		setRandomElement();
+		get_elements();
+		getRandomElement();
 	});
 </script>
 
@@ -80,72 +73,39 @@
 	<Input
 		placeholder="Search..."
 		bind:value={search}
-		on:input={debounce(handle_search, 1000)}
+		on:input={debounce(get_elements, 200)}
 		class="h-[34px] text-base bg-white"
 		autocomplete="false"
 	></Input>
 	{#if search != ''}
-		<button
-			class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white hover:bg-slate-50 active:shadow-none"
-			on:click={() => goto('/')}
-		>
-			<p class={searching ? 'animate-spin' : ''}>❌</p>
-		</button>
+		<Button on:click={() => goto('/')}>❌</Button>
 	{/if}
-	<button
-		class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-		on:click={() => goto('/info')}>❓</button
-	>
-	<button
-		class="px-2 py-1 border rounded-md shadow-sm shrink-0 font-medium bg-white hover:bg-slate-50 active:shadow-none"
-		on:click={async () => goto(`/${random_element}`)}
-	>
-		🔀
-	</button>
+
+	<Button on:click={() => goto('/info')}>❓</Button>
+	<Button on:click={() => goto(`/${random_element}`)}>🔀</Button>
 </div>
 
-{#if elements.length == 0 && !searching}
+{#if elements.length == 0}
 	<div class="flex flex-wrap gap-2 my-2 font-medium">
-		{#if query != ''}
-			<button
-				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-				in:scale={{ delay: 200, duration: 300 }}
-				on:click={() => goto('/info')}>😭 No Results</button
-			>
+		{#if noResults}
+			<Button on:click={() => goto('/info')}>😭 No Results</Button>
 		{/if}
 		{#if random_element}
-			<button
-				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-				in:scale={{ delay: 200, duration: 300 }}
-				on:click={async () => {
-					if (random_element) {
-						const q = random_element.split(' ')[0];
-						goto('?q=' + q.substring(0, Math.floor(q.length / 2)), {
-							replaceState: true
-						});
-					}
-				}}>✨ Random Search</button
+			<Button on:click={() => goto(`?q=${getRandomSearchQuery()}`)} fadeIn={true}
+				>✨ Random Search</Button
 			>
 		{/if}
 	</div>
 {/if}
 
 <div class="flex flex-wrap gap-2 my-2">
-	{#each elements as element, i}
-		<a
-			class="px-2 py-1 font-medium border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-			href={element.name}
-			in:scale={{ delay: 10 * i, duration: 100 }}
+	{#each elements as element}
+		<Button on:click={() => goto(`?q=${search}`).then(() => goto(`/${element.name}`))}
+			>{element.emoji} {element.name}</Button
 		>
-			{element.emoji}
-			{element.name}
-		</a>
 	{/each}
 
 	{#if elements.length == 100}
-		<button
-			class="px-2 py-1 border rounded-md shadow-sm font-medium bg-white hover:bg-slate-50 active:shadow-none"
-			on:click={() => goto('/info')}>➕ Many more...</button
-		>
+		<Button on:click={() => goto('/info')}>➕ Many more...</Button>
 	{/if}
 </div>
