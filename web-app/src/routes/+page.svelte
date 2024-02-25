@@ -93,6 +93,10 @@
 		</button>
 	{/if}
 	<button
+		class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+		on:click={() => goto('/info')}>❓</button
+	>
+	<button
 		class="px-2 py-1 border rounded-md shadow-sm shrink-0 font-medium bg-white hover:bg-slate-50 active:shadow-none"
 		on:click={async () => goto(`/${random_element}`)}
 	>
@@ -105,12 +109,8 @@
 		{#if query != ''}
 			<button
 				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+				in:scale={{ delay: 200, duration: 300 }}
 				on:click={() => goto('/info')}>😭 No Results</button
-			>
-		{:else}
-			<button
-				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-				on:click={() => goto('/info')}>❓ Get More Info</button
 			>
 		{/if}
 		{#if random_element}
@@ -131,10 +131,11 @@
 {/if}
 
 <div class="flex flex-wrap gap-2 my-2">
-	{#each elements as element}
+	{#each elements as element, i}
 		<a
 			class="px-2 py-1 font-medium border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
 			href={element.name}
+			in:scale={{ delay: 10 * i, duration: 100 }}
 		>
 			{element.emoji}
 			{element.name}
@@ -144,7 +145,7 @@
 	{#if elements.length == 100}
 		<button
 			class="px-2 py-1 border rounded-md shadow-sm font-medium bg-white hover:bg-slate-50 active:shadow-none"
-			on:click={() => goto('/about')}>➕ Many more...</button
+			on:click={() => goto('/info')}>➕ Many more...</button
 		>
 	{/if}
 </div>
