@@ -101,29 +101,28 @@
 
 {#if elements.length == 0 && !searching}
 	<div class="flex flex-wrap gap-2 my-2 font-medium">
-		{#if query != ''}
+		{#if random_element}
+			{#if query != ''}
+				<button
+					class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+					on:click={() => goto('/info')}>😭 No Results</button
+				>
+			{:else}
+				<button
+					class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+					on:click={() => goto('/info')}>❓ Get More Info</button
+				>
+			{/if}
+
 			<button
 				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-				on:click={() => goto('/info')}>😭 No Results</button
-			>
-		{:else}
-			<button
-				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-				on:click={() => goto('/info')}>❓ Get More Info</button
+				on:click={async () => {
+					goto('?q=' + random_element.substring(0, Math.floor(random_element.length / 2)), {
+						replaceState: true
+					});
+				}}>✨ Random Search</button
 			>
 		{/if}
-
-		<button
-			class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-			on:click={async () => {
-				if (!random_element) {
-					setRandomElement();
-				}
-				goto('?q=' + random_element.substring(0, Math.floor(random_element.length / 2)), {
-					replaceState: true
-				});
-			}}>✨ Random Search</button
-		>
 	</div>
 {/if}
 
