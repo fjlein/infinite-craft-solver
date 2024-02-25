@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import * as Popover from '$lib/components/ui/popover';
+	import { fade, scale } from 'svelte/transition';
 
 	import _ from 'lodash';
 	import { onMount } from 'svelte';
@@ -53,9 +53,10 @@
 		searching = false;
 		elements = [];
 		search = '';
+		random_element = null;
 	}
 
-	let random_element: string;
+	let random_element: string | null = null;
 
 	async function setRandomElement() {
 		const res = await fetch('/api/elements/random');
@@ -101,25 +102,28 @@
 
 {#if elements.length == 0 && !searching}
 	<div class="flex flex-wrap gap-2 my-2 font-medium">
-		{#if random_element}
-			{#if query != ''}
-				<button
-					class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-					on:click={() => goto('/info')}>😭 No Results</button
-				>
-			{:else}
-				<button
-					class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
-					on:click={() => goto('/info')}>❓ Get More Info</button
-				>
-			{/if}
-
+		{#if query != ''}
 			<button
 				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+				on:click={() => goto('/info')}>😭 No Results</button
+			>
+		{:else}
+			<button
+				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+				on:click={() => goto('/info')}>❓ Get More Info</button
+			>
+		{/if}
+		{#if random_element}
+			<button
+				class="px-2 py-1 border rounded-md shadow-sm bg-white hover:bg-slate-50 active:shadow-none"
+				in:scale={{ delay: 200, duration: 300 }}
 				on:click={async () => {
-					goto('?q=' + random_element.substring(0, Math.floor(random_element.length / 2)), {
-						replaceState: true
-					});
+					if (random_element) {
+						const q = random_element.split(' ')[0];
+						goto('?q=' + q.substring(0, Math.floor(q.length / 2)), {
+							replaceState: true
+						});
+					}
 				}}>✨ Random Search</button
 			>
 		{/if}

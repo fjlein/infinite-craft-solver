@@ -14,7 +14,7 @@ export const GET: RequestHandler = async () => {
 		},
 		{
 			$match: {
-				_id: { $nin: ['Fire', 'Water', 'Earth', 'Wind'] }
+				_id: { $nin: ['Fire', 'Water', 'Earth', 'Wind', 'Nothing'] }
 			}
 		},
 		{
