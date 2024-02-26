@@ -12,6 +12,12 @@ export const GET: RequestHandler = async ({ url }) => {
 		{
 			// Match documents where `result.name` contains the search term
 			$match: {
+				'result.name': { $nin: ['Water', 'Fire', 'Earth', 'Wind', 'Nothing'] }
+			}
+		},
+		{
+			// Match documents where `result.name` contains the search term
+			$match: {
 				'result.name': { $regex: query, $options: 'i' }
 			}
 		},

@@ -91,12 +91,18 @@
 	</div>
 {/if}
 
-<div class="flex flex-wrap gap-2 my-2">
+<div class="flex flex-wrap gap-2 my-2" data-sveltekit-preload-code="viewport">
 	{#each elements as element}
-		<Button on:click={() => goto(`?q=${search}`).then(() => goto(`/${element.name}`))}>
+		<!-- <Button on:click={() => goto(`?q=${search}`).then(() => goto(`/${element.name}`))}>
 			{element.emoji}
 			{element.name}
-		</Button>
+		</Button> -->
+		<a
+			href={`/${element.name}`}
+			class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white hover:bg-slate-50 active:shadow-none"
+			>{element.emoji}
+			{element.name}</a
+		>
 	{/each}
 
 	{#if elements.length == 100}
