@@ -4,6 +4,7 @@
 	import type { PageData } from './$types';
 	import _ from 'lodash';
 	import { page } from '$app/stores';
+	import Graph from '$lib/components/mine/graph.svelte';
 
 	export let data: PageData;
 
@@ -42,9 +43,31 @@
 
 			const recipe: Recipe = await getRecipe(element);
 			recipes = [...recipes, recipe];
+
+			if (!nodes.includes(recipe.first.name)) {
+				nodes.push(recipe.first.name);
+				child.addNode(recipe.first.name);
+			}
+
+			if (!nodes.includes(recipe.second.name)) {
+				nodes.push(recipe.second.name);
+				child.addNode(recipe.second.name);
+			}
+
+			if (!nodes.includes(recipe.result.name)) {
+				nodes.push(recipe.result.name);
+				child.addNode(recipe.result.name);
+			}
+
+			child.addLink(recipe.first.name, recipe.result.name);
+			child.addLink(recipe.second.name, recipe.result.name);
+
 			toResolve.push(recipe.first.name, recipe.second.name);
+			await new Promise((r) => setTimeout(r, 500));
 		}
 	}
+
+	let nodes: string[] = [];
 
 	let recipes: Recipe[];
 	$: recipes = [];
@@ -56,6 +79,8 @@
 		toResolve = [data.element.name];
 		resolveRecipes();
 	});
+
+	let child: Graph;
 </script>
 
 <div class="flex flex-row justify-between space-x-2 font-medium">
@@ -72,6 +97,8 @@
 		🔀
 	</button>
 </div>
+
+<Graph bind:this={child}></Graph>
 
 <pre>
 

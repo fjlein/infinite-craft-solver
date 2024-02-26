@@ -4,6 +4,7 @@
 	import { tweened } from 'svelte/motion';
 	import { derived } from 'svelte/store';
 	import { cubicOut } from 'svelte/easing';
+	import { afterNavigate } from '$app/navigation';
 
 	export const name = writable<string>('Loading');
 
@@ -22,16 +23,16 @@
 		$myNumber.toLocaleString(undefined, { maximumFractionDigits: 0 })
 	);
 
-	onMount(() => {
-		async function fetchStatus() {
-			const s = await fetch('/api/status').then((x) => x.json());
-			resolved.set(s.resolved);
-			queued.set(s.queued);
-			elements.set(s.elements);
-			name.set(s.name);
-			setTimeout(fetchStatus, 5000);
-		}
+	async function fetchStatus() {
+		const s = await fetch('/api/status').then((x) => x.json());
+		resolved.set(s.resolved);
+		queued.set(s.queued);
+		elements.set(s.elements);
+		name.set(s.name);
+		setTimeout(fetchStatus, 5000);
+	}
 
+	afterNavigate(() => {
 		fetchStatus();
 	});
 
