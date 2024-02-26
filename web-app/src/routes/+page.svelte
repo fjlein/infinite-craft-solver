@@ -3,13 +3,16 @@
 	import { page } from '$app/stores';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import _ from 'lodash';
-	import Button from '$lib/components/mine/button.svelte';
+	import { Loader2 } from 'lucide-svelte';
+	import { fade } from 'svelte/transition';
+	import CustomLink from '$lib/components/mine/link.svelte';
 
 	let search: string = '';
 	let random_element: string | null = null;
 	let query: string | null = null;
 	let elements: { name: string; emoji: string }[] = [];
 	let noResults: boolean = false;
+	let searching: boolean = false;
 
 	const debounce = (mainFunction: any, delay: number | undefined) => {
 		let timer: number | undefined;
@@ -23,11 +26,17 @@
 		};
 	};
 
+	function reset() {
+		elements = [];
+		search = '';
+		noResults = false;
+		searching = false;
+	}
+
 	async function get_elements(): Promise<void> {
+		searching = true;
 		if (search == '') {
-			elements = [];
-			search = '';
-			noResults = false;
+			reset();
 			return;
 		}
 
@@ -37,6 +46,7 @@
 		if (elements.length == 0) {
 			noResults = true;
 		}
+		searching = false;
 	}
 
 	async function getRandomElement(): Promise<void> {
@@ -63,49 +73,53 @@
 </script>
 
 <div class="flex flex-row space-x-2">
-	<Input
-		placeholder="Search..."
-		bind:value={search}
-		on:input={debounce(get_elements, 200)}
-		class="h-[34px] text-base bg-white"
-		autocomplete="false"
-	></Input>
+	<div class="w-full relative">
+		<Input
+			placeholder="Search..."
+			bind:value={search}
+			on:input={debounce(get_elements, 200)}
+			class="h-[34px] text-base bg-white"
+			autocomplete="false"
+		></Input>
+		{#if searching}
+			<div
+				class="absolute right-2 -translate-y-[26px]"
+				in:fade={{ duration: 200 }}
+				out:fade={{ duration: 200 }}
+			>
+				<Loader2 class="animate-spin text-muted-foreground" size="18"></Loader2>
+			</div>
+		{/if}
+	</div>
+
 	{#if search != ''}
-		<Button on:click={() => goto('/')}>❌</Button>
+		<CustomLink href="/">❌</CustomLink>
 	{/if}
 
-	<Button on:click={() => goto('/info')}>❓</Button>
-	<Button on:click={() => goto(`/${random_element}`)}>🔀</Button>
+	<CustomLink href="/info">❓</CustomLink>
+	<CustomLink href={`/${random_element}`}>🔀</CustomLink>
 </div>
 
 {#if elements.length == 0}
 	<div class="flex flex-wrap gap-2 my-2 font-medium">
 		{#if noResults}
-			<Button on:click={() => goto('/info')}>😭 No Results</Button>
+			<CustomLink href="/info">😭 No Results</CustomLink>
 		{/if}
 		{#if random_element}
-			<Button on:click={() => goto(`?q=${getRandomSearchQuery()}`)} fadeIn={true}>
-				✨ Random Search
-			</Button>
+			<CustomLink href={`?q=${getRandomSearchQuery()}`} fadeIn>✨ Random Search</CustomLink>
 		{/if}
 	</div>
 {/if}
 
 <div class="flex flex-wrap gap-2 my-2" data-sveltekit-preload-code="viewport">
 	{#each elements as element}
-		<!-- <Button on:click={() => goto(`?q=${search}`).then(() => goto(`/${element.name}`))}>
+		<CustomLink href={`/${element.name}`} on:click={() => goto(`?q=${search}`)}>
 			{element.emoji}
 			{element.name}
-		</Button> -->
-		<a
-			href={`/${element.name}`}
-			class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white hover:bg-slate-50 active:shadow-none"
-			>{element.emoji}
-			{element.name}</a
-		>
+		</CustomLink>
 	{/each}
 
 	{#if elements.length == 100}
-		<Button on:click={() => goto('/info')}>➕ Many more...</Button>
+		<CustomLink href="/info">➕ Many more...</CustomLink>
 	{/if}
 </div>
