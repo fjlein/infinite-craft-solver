@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import _ from 'lodash';
-	import { Loader2 } from 'lucide-svelte';
+	import { Loader2, X } from 'lucide-svelte';
 	import { fade } from 'svelte/transition';
 	import CustomLink from '$lib/components/mine/link.svelte';
 
@@ -34,12 +34,11 @@
 	}
 
 	async function get_elements(): Promise<void> {
-		searching = true;
 		if (search == '') {
 			reset();
 			return;
 		}
-
+		searching = true;
 		const res = await fetch('/api/elements?q=' + search);
 		elements = await res.json();
 
@@ -81,20 +80,26 @@
 			class="h-[34px] text-base bg-white"
 			autocomplete="false"
 		></Input>
-		{#if searching}
+		{#if searching || $navigating}
 			<div
 				class="absolute right-2 -translate-y-[26px]"
 				in:fade={{ duration: 200 }}
-				out:fade={{ duration: 200 }}
+				out:fade={{ duration: 50 }}
 			>
 				<Loader2 class="animate-spin text-muted-foreground" size="18"></Loader2>
 			</div>
 		{/if}
+		<!-- {#if !searching && (noResults || elements.length > 0)}
+			<button
+				class="absolute right-2 -translate-y-[26px]"
+				in:fade={{ duration: 50 }}
+				out:fade={{ duration: 50 }}
+				on:click={() => goto('/')}
+			>
+				<X class="text-muted-foreground" size="18"></X>
+			</button>
+		{/if} -->
 	</div>
-
-	{#if search != ''}
-		<CustomLink href="/">❌</CustomLink>
-	{/if}
 
 	<CustomLink href="/info">❓</CustomLink>
 	<CustomLink href={`/${random_element}`}>🔀</CustomLink>
@@ -104,6 +109,7 @@
 	<div class="flex flex-wrap gap-2 my-2 font-medium">
 		{#if noResults}
 			<CustomLink href="/info">😭 No Results</CustomLink>
+			<CustomLink href="/">❌ Clear</CustomLink>
 		{/if}
 		{#if random_element}
 			<CustomLink href={`?q=${getRandomSearchQuery()}`} fadeIn>✨ Random Search</CustomLink>
