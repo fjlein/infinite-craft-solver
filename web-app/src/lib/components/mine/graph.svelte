@@ -2,7 +2,7 @@
 	import _ from 'lodash';
 	import { forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide } from 'd3-force';
 	import { onMount } from 'svelte';
-	import { select, selectAll, zoom } from 'd3';
+	import { forceX, forceY, select, selectAll, zoom } from 'd3';
 
 	let width = 400;
 	let height = 500;
@@ -40,12 +40,11 @@
 				'link',
 				forceLink(links)
 					.id((d) => d.id)
-					.distance(100)
-					.strength(1)
+					.distance(80)
+					.strength(11)
 			)
-			.force('charge', forceManyBody().strength(-100))
-			.force('center', forceCenter(width / 2, height / 2).strength(0.05))
-			.force('collide', forceCollide(80).strength(0.4))
+			.force('charge', forceManyBody().strength(-200))
+			.force('collide', forceCollide(80).strength(0.7))
 			.on('tick', ticked);
 	});
 
@@ -77,8 +76,8 @@
 				viewBox="0 0 10 10"
 				refX="5"
 				refY="5"
-				markerWidth="8"
-				markerHeight="8"
+				markerWidth="10"
+				markerHeight="10"
 				orient="auto-start-reverse"
 				fill={'#cccccc'}
 			>
@@ -93,6 +92,7 @@
 				x2={(link.target.x + link.source.x) / 2}
 				y2={(link.target.y + link.source.y) / 2}
 				stroke={'#dddddd'}
+				stroke-dasharray={'3 3'}
 			></line>
 			<line
 				x2={link.target.x}
@@ -104,7 +104,7 @@
 			></line>
 		{/each}
 
-		{#each nodes as point}
+		{#each nodes as point, i}
 			<g>
 				<text x={point.x - 5} y={point.y + 5} text-anchor={'middle'} pointer-events={'none'}
 					>{point.text}</text
