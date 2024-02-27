@@ -37,13 +37,9 @@
 
 	async function resolveRecipes() {
 		while (!toResolve.every((e) => e === null)) {
-			console.log(tree);
-			console.log(toResolve);
 			const l = tree.length;
 
 			const element: string | null = toResolve.shift()!;
-
-			console.log('Resolving:', element);
 
 			if (['Fire', 'Water', 'Earth', 'Wind', null].includes(element)) {
 				tree.push(null, null);
@@ -66,24 +62,27 @@
 
 			const level = Math.floor(Math.log2(l + 2));
 
-			console.log(recipe.first.name + l, level);
-			console.log(recipe.second.name + (l + 1), level);
-
-			child.addNode(recipe.first.name + l, level, `${recipe.first.emoji} ${recipe.first.name}`);
+			child.addNode(
+				recipe.first.name + l,
+				level,
+				`${recipe.first.emoji} ${recipe.first.name}`,
+				tree[Math.floor(l / 2)]
+			);
 			child.addNode(
 				recipe.second.name + (l + 1),
 				level,
-				`${recipe.second.emoji} ${recipe.second.name}`
+				`${recipe.second.emoji} ${recipe.second.name}`,
+				tree[Math.floor(l / 2)]
 			);
 
 			tree.push(recipe.first.name + l);
-			child.addLink(recipe.first.name + l, tree[Math.floor(l / 2)]);
+			child.addLink(tree[Math.floor(l / 2)], recipe.first.name + l);
 
 			tree.push(recipe.second.name + (l + 1));
-			child.addLink(recipe.second.name + (l + 1), tree[Math.floor(l / 2)]);
+			child.addLink(tree[Math.floor(l / 2)], recipe.second.name + (l + 1));
 
 			toResolve.push(recipe.first.name, recipe.second.name);
-			await new Promise((r) => setTimeout(r, 500));
+			await new Promise((r) => setTimeout(r, 200));
 		}
 	}
 
