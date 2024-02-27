@@ -5,7 +5,7 @@
 	import { select, selectAll, zoom } from 'd3';
 
 	let width = 400;
-	let height = 600;
+	let height = 500;
 
 	export let nodes = [];
 	export let links = [];

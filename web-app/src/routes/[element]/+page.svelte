@@ -127,6 +127,6 @@
 	</div>
 </div>
 
-<div class="mt-5 h-full">
+<div class="mt-5 border shadow-sm rounded-md">
 	<Graph bind:this={graph}></Graph>
 </div>
