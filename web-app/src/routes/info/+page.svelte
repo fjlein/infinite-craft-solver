@@ -7,7 +7,7 @@
 	// export let data: PageData;
 </script>
 
-<p class="mb-5 text-muted-foreground">Get more info.</p>
+<p class="mb-5 text-muted-foreground">Get more info about this project.</p>
 
 <div class="flex flex-row justify-between space-x-2 font-medium">
 	<button

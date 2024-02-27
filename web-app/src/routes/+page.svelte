@@ -91,9 +91,9 @@
 			<div
 				class="absolute right-2 -translate-y-[26px]"
 				in:fade={{ duration: 200 }}
-				out:fade={{ duration: 50 }}
+				out:fade={{ duration: 200 }}
 			>
-				<Loader2 class="animate-spin text-muted-foreground" size="18"></Loader2>
+				<Loader2 class="animate-spin text-muted-foreground" size="16"></Loader2>
 			</div>
 		{/if}
 		<!-- {#if !searching && (noResults || elements.length > 0)}

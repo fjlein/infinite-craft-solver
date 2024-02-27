@@ -5,8 +5,11 @@
 	import CustomLink from '$lib/components/mine/link.svelte';
 	import Graph from '$lib/components/mine/graph.svelte';
 	import _ from 'lodash';
+	import { fade } from 'svelte/transition';
+	import { Loader2 } from 'lucide-svelte';
 
 	export let data: PageData;
+	let loading: boolean;
 
 	interface Recipe {
 		first: {
@@ -83,6 +86,7 @@
 			toResolve.push(recipe.first.name, recipe.second.name);
 			await new Promise((r) => setTimeout(r, 200));
 		}
+		loading = false;
 	}
 
 	let tree: (string | null)[] = [];
@@ -93,6 +97,7 @@
 	let toResolve: (string | null)[];
 
 	afterNavigate(() => {
+		loading = true;
 		recipes = [];
 		toResolve = [data.element.name];
 		tree = [data.element.name + 0];
@@ -102,17 +107,26 @@
 	let graph: Graph;
 </script>
 
-<p class="mb-5 text-muted-foreground">
-	{data.element.emoji}
-	{data.element.name}
-</p>
+<div class="flex items-center mb-5 space-x-1">
+	<p class="text-muted-foreground">
+		{data.element.emoji}
+		{data.element.name}
+	</p>
+	{#if loading}
+		<div in:fade={{ duration: 200 }} out:fade={{ duration: 200 }}>
+			<Loader2 class="animate-spin text-muted-foreground" size="16"></Loader2>
+		</div>
+	{/if}
+</div>
 
 <div class="flex flex-row justify-between space-x-2 font-medium">
 	<CustomLink href="/">⬅️ Search</CustomLink>
 	<div class="flex space-x-2">
 		<CustomLink href="/info">❓</CustomLink>
-		<CustomLink href="/random">🔀</CustomLink>
+		<CustomLink href="/random" reload>🔀</CustomLink>
 	</div>
 </div>
 
-<Graph bind:this={graph}></Graph>
+<div class="mt-5 h-full">
+	<Graph bind:this={graph}></Graph>
+</div>
