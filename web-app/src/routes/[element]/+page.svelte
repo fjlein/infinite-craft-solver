@@ -2,9 +2,10 @@
 	import { afterNavigate, goto, invalidate, invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import _ from 'lodash';
 	import { page } from '$app/stores';
 	import Graph from '$lib/components/mine/graph.svelte';
+	import _ from 'lodash';
+	import Link from '$lib/components/mine/link.svelte';
 
 	export let data: PageData;
 
@@ -35,48 +36,68 @@
 	}
 
 	async function resolveRecipes() {
-		while (toResolve.length != 0) {
-			const element: string = toResolve.shift()!;
-			if (['Fire', 'Water', 'Earth', 'Wind', ..._.map(recipes, 'result.name')].includes(element)) {
+		while (!toResolve.every((e) => e === null)) {
+			console.log(tree);
+			console.log(toResolve);
+			const l = tree.length;
+
+			const element: string | null = toResolve.shift()!;
+
+			console.log('Resolving:', element);
+
+			if (['Fire', 'Water', 'Earth', 'Wind', null].includes(element)) {
+				tree.push(null, null);
+				toResolve.push(null, null);
+				// await new Promise((r) => setTimeout(r, 2000));
 				continue;
 			}
 
-			const recipe: Recipe = await getRecipe(element);
+			let recipe: Recipe | undefined = _.find(recipes, (n) => n.result.name == element);
+
+			if (!recipe) {
+				recipe = (await getRecipe(element)) as Recipe;
+			}
+
 			recipes = [...recipes, recipe];
 
-			if (!nodes.includes(recipe.first.name)) {
-				nodes.push(recipe.first.name);
-				child.addNode(recipe.first.name);
+			if (tree.length == 1) {
+				child.addNode(recipe.result.name + 0, 0, `${recipe.result.emoji} ${recipe.result.name}`);
 			}
 
-			if (!nodes.includes(recipe.second.name)) {
-				nodes.push(recipe.second.name);
-				child.addNode(recipe.second.name);
-			}
+			const level = Math.floor(Math.log2(l + 2));
 
-			if (!nodes.includes(recipe.result.name)) {
-				nodes.push(recipe.result.name);
-				child.addNode(recipe.result.name);
-			}
+			console.log(recipe.first.name + l, level);
+			console.log(recipe.second.name + (l + 1), level);
 
-			child.addLink(recipe.first.name, recipe.result.name);
-			child.addLink(recipe.second.name, recipe.result.name);
+			child.addNode(recipe.first.name + l, level, `${recipe.first.emoji} ${recipe.first.name}`);
+			child.addNode(
+				recipe.second.name + (l + 1),
+				level,
+				`${recipe.second.emoji} ${recipe.second.name}`
+			);
+
+			tree.push(recipe.first.name + l);
+			child.addLink(recipe.first.name + l, tree[Math.floor(l / 2)]);
+
+			tree.push(recipe.second.name + (l + 1));
+			child.addLink(recipe.second.name + (l + 1), tree[Math.floor(l / 2)]);
 
 			toResolve.push(recipe.first.name, recipe.second.name);
 			await new Promise((r) => setTimeout(r, 500));
 		}
 	}
 
-	let nodes: string[] = [];
+	let tree: (string | null)[] = [];
 
 	let recipes: Recipe[];
 	$: recipes = [];
 
-	let toResolve: string[];
+	let toResolve: (string | null)[];
 
 	afterNavigate(() => {
 		recipes = [];
 		toResolve = [data.element.name];
+		tree = [data.element.name + 0];
 		resolveRecipes();
 	});
 
@@ -90,19 +111,14 @@
 	>
 		⬅️ Search
 	</button>
-	<button
-		class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white hover:bg-slate-50 active:shadow-none"
-		on:click={() => goto('/random')}
-	>
-		🔀
-	</button>
+	<Link href="/random">🔀</Link>
 </div>
 
 <Graph bind:this={child}></Graph>
 
-<pre>
+<!-- <pre>
 
 	{JSON.stringify(recipes, null, 4)}
-</pre>
+</pre> -->
 
 <!-- <Graph></Graph> -->

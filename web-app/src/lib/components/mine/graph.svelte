@@ -1,6 +1,14 @@
 <script>
-	import { forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide } from 'd3-force';
-	import { onMount } from 'svelte';
+	import _ from 'lodash';
+	import { forceX, select, zoom } from 'd3';
+	import {
+		forceSimulation,
+		forceLink,
+		forceManyBody,
+		forceCenter,
+		forceCollide,
+		forceY
+	} from 'd3-force';
 
 	let width = 400;
 	let height = 600;
@@ -22,35 +30,45 @@
 	$: {
 		simulation
 			.nodes(nodes)
-			.force('repulsion', forceManyBody().strength(-200))
+			// .force('repulsion', forceManyBody().strength(-100))
 			.force(
 				'link',
 				forceLink(links)
 					.id((d) => d.id)
-					.distance(100)
+					.distance(70)
+					.strength(10)
 			)
-			// .force('charge', forceManyBody().strength(-500))
-			.force('center', forceCenter(width / 2, height / 2))
+			.force('charge', forceManyBody().strength(-300))
 			// .force(
-			// 	'collide',
-			// 	forceCollide((d) => 70)
+			// 	'y',
+			// 	forceY()
+			// 		.y((d) => {
+			// 			return d.level * 100 + 50;
+			// 		})
+			// 		.strength(3)
 			// )
+			.force('center', forceCenter(width / 2, height / 2))
+			.force(
+				'x',
+				forceX()
+					.x((d) => width / 2)
+					.strength(0.1)
+			)
+			.force('collide', forceCollide(70).strength(0.3))
 			.on('tick', ticked);
 	}
 
 	export function addLink(from, to) {
-		links.push({ source: from, target: to });
-		simulation
-			.force(
-				'link',
-				forceLink(links).id((d) => d.id)
-			)
-			.alpha(0.2);
+		links.push({ source: from, target: to, x: _.random(width), y: _.random(height) });
+		simulation.force(
+			'link',
+			forceLink(links).id((d) => d.id)
+		);
 	}
 
-	export function addNode(name) {
-		nodes.push({ id: name, x: width / 2, y: height / 2 });
-		simulation.nodes(nodes).alpha(0.2);
+	export function addNode(name, level, text) {
+		nodes.push({ id: name, text: text });
+		simulation.nodes(nodes).alpha(0.2).restart();
 	}
 </script>
 
@@ -62,16 +80,23 @@
 				y1={link.source.y}
 				x2={link.target.x}
 				y2={link.target.y}
-				stroke={'#000000'}
+				stroke={'#bfbfbf'}
 			>
 			</line>
 		{/each}
 
 		{#each nodes as point}
-			<circle cx={point.x} cy={point.y} r="8" fill={'#ff0000'}>
-				<title>{point.id}</title>
-			</circle>
-			<text x={point.x - 5} y={point.y + 5} class="text-white">{point.id}</text>
+			<g>
+				<!-- <rect
+					x={point.x - 50}
+					y={point.y - 15}
+					stroke={'black'}
+					fill="#ffffff"
+					height="30"
+					width="100"
+				></rect> -->
+				<text x={point.x - 5} y={point.y + 5} text-anchor={'middle'}>{point.text}</text>
+			</g>
 		{/each}
 	</svg>
 </div>
