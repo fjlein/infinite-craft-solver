@@ -12,13 +12,6 @@
 			<div class="mb-1 md:mt-10">
 				<h1 class="text-4xl font-semibold"><a href="/">Infinite Craft Solver</a></h1>
 			</div>
-
-			<p class="mb-5 text-muted-foreground">
-				Find the shortest recipe in <a
-					href="https://neal.fun/infinite-craft"
-					class="underline underline-offset-4">Infinite Craft</a
-				>.
-			</p>
 			<slot />
 		</div>
 

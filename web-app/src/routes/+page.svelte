@@ -71,6 +71,13 @@
 	});
 </script>
 
+<p class="mb-5 text-muted-foreground">
+	Find the shortest recipe in <a
+		href="https://neal.fun/infinite-craft"
+		class="underline underline-offset-4">Infinite Craft</a
+	>.
+</p>
+
 <div class="flex flex-row space-x-2">
 	<div class="w-full relative">
 		<Input
@@ -102,7 +109,7 @@
 	</div>
 
 	<CustomLink href="/info">❓</CustomLink>
-	<CustomLink href={`/${random_element}`}>🔀</CustomLink>
+	<CustomLink href="/random">🔀</CustomLink>
 </div>
 
 {#if elements.length == 0}

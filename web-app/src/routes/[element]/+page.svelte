@@ -2,10 +2,9 @@
 	import { afterNavigate, goto, invalidate, invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import { page } from '$app/stores';
+	import CustomLink from '$lib/components/mine/link.svelte';
 	import Graph from '$lib/components/mine/graph.svelte';
 	import _ from 'lodash';
-	import Link from '$lib/components/mine/link.svelte';
 
 	export let data: PageData;
 
@@ -25,6 +24,11 @@
 	}
 
 	async function getRecipe(name: string) {
+		let recipe: Recipe | undefined = _.find(recipes, (n) => n.result.name == name);
+
+		if (recipe) {
+			return recipe;
+		}
 		const res = await fetch(`/api/elements/${name}/recipe`);
 		const body = await res.json();
 
@@ -37,38 +41,33 @@
 
 	async function resolveRecipes() {
 		while (!toResolve.every((e) => e === null)) {
-			const l = tree.length;
-
-			const element: string | null = toResolve.shift()!;
+			const element: string = toResolve.shift() as string;
 
 			if (['Fire', 'Water', 'Earth', 'Wind', null].includes(element)) {
 				tree.push(null, null);
 				toResolve.push(null, null);
-				// await new Promise((r) => setTimeout(r, 2000));
 				continue;
 			}
 
-			let recipe: Recipe | undefined = _.find(recipes, (n) => n.result.name == element);
+			const l = tree.length;
 
-			if (!recipe) {
-				recipe = (await getRecipe(element)) as Recipe;
-			}
+			const recipe = await getRecipe(element);
 
 			recipes = [...recipes, recipe];
 
-			if (tree.length == 1) {
-				child.addNode(recipe.result.name + 0, 0, `${recipe.result.emoji} ${recipe.result.name}`);
+			if (l == 1) {
+				graph.addNode(recipe.result.name + 0, 0, `${recipe.result.emoji} ${recipe.result.name}`);
 			}
 
 			const level = Math.floor(Math.log2(l + 2));
 
-			child.addNode(
+			graph.addNode(
 				recipe.first.name + l,
 				level,
 				`${recipe.first.emoji} ${recipe.first.name}`,
 				tree[Math.floor(l / 2)]
 			);
-			child.addNode(
+			graph.addNode(
 				recipe.second.name + (l + 1),
 				level,
 				`${recipe.second.emoji} ${recipe.second.name}`,
@@ -76,10 +75,10 @@
 			);
 
 			tree.push(recipe.first.name + l);
-			child.addLink(tree[Math.floor(l / 2)], recipe.first.name + l);
+			graph.addLink(tree[Math.floor(l / 2)], recipe.first.name + l);
 
 			tree.push(recipe.second.name + (l + 1));
-			child.addLink(tree[Math.floor(l / 2)], recipe.second.name + (l + 1));
+			graph.addLink(tree[Math.floor(l / 2)], recipe.second.name + (l + 1));
 
 			toResolve.push(recipe.first.name, recipe.second.name);
 			await new Promise((r) => setTimeout(r, 200));
@@ -100,24 +99,20 @@
 		resolveRecipes();
 	});
 
-	let child: Graph;
+	let graph: Graph;
 </script>
 
+<p class="mb-5 text-muted-foreground">
+	{data.element.emoji}
+	{data.element.name}
+</p>
+
 <div class="flex flex-row justify-between space-x-2 font-medium">
-	<button
-		class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white hover:bg-slate-50 active:shadow-none"
-		on:click={() => goto('/')}
-	>
-		⬅️ Search
-	</button>
-	<Link href="/random">🔀</Link>
+	<CustomLink href="/">⬅️ Search</CustomLink>
+	<div class="flex space-x-2">
+		<CustomLink href="/info">❓</CustomLink>
+		<CustomLink href="/random">🔀</CustomLink>
+	</div>
 </div>
 
-<Graph bind:this={child}></Graph>
-
-<!-- <pre>
-
-	{JSON.stringify(recipes, null, 4)}
-</pre> -->
-
-<!-- <Graph></Graph> -->
+<Graph bind:this={graph}></Graph>

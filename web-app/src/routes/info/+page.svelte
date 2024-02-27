@@ -7,6 +7,8 @@
 	// export let data: PageData;
 </script>
 
+<p class="mb-5 text-muted-foreground">Get more info.</p>
+
 <div class="flex flex-row justify-between space-x-2 font-medium">
 	<button
 		class="px-2 py-1 border rounded-md shadow-sm shrink-0 bg-white hover:bg-slate-50 active:shadow-none"
