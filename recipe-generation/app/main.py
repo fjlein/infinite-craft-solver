@@ -10,7 +10,7 @@ from app.db import db
 
 ua = UserAgent()
 
-logging.basicConfig(filename="logging.log", filemode="w", level=logging.DEBUG)
+logging.basicConfig(filename="logging.log", filemode="w", level=logging.DEBUG, format='%(asctime)s %(levelname)-8s %(message)s')
 
 
 def create_new_recipes():
@@ -64,12 +64,23 @@ while True:
         content = json.loads(response.content)
     except requests.exceptions.ConnectionError as e:
         logging.warning(repr(e))
-        logging.info("Trying again in 10 seconds")
+        logging.warning("Trying again in 10 seconds")
         sleep(10)
         continue
+    except json.JSONDecodeError as e:
+        if response.status_code == 403:
+            logging.warning("403")
+            logging.warning("Trying again in 10 seconds")
+            sleep(10)
+            continue
+        else:
+            logging.warning(repr(e))
+            logging.warning("Trying again in 60 seconds")
+            sleep(60)
+            continue
     except Exception as e:
         logging.warning(repr(e))
-        logging.info("Trying again in 5 minutes")
+        logging.warning("Trying again in 5 minutes")
         sleep(5 * 60)
         continue
 
@@ -92,4 +103,4 @@ while True:
 
     logging.info("...Updated Recipe in database")
 
-    sleep(random.uniform(0.05, 0.1))
+    sleep(random.uniform(1, 1.5))
