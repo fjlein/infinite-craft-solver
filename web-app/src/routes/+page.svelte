@@ -83,11 +83,11 @@
 		<Input
 			placeholder="Search..."
 			bind:value={search}
-			on:input={debounce(get_elements, 200)}
+			on:input={debounce(get_elements, 0)}
 			class="h-[34px] text-base bg-white"
 			autocomplete="false"
 		></Input>
-		{#if searching || $navigating}
+		{#if searching}
 			<div
 				class="absolute right-2 -translate-y-[26px]"
 				in:fade={{ duration: 200 }}
@@ -96,19 +96,9 @@
 				<Loader2 class="animate-spin text-muted-foreground" size="16"></Loader2>
 			</div>
 		{/if}
-		<!-- {#if !searching && (noResults || elements.length > 0)}
-			<button
-				class="absolute right-2 -translate-y-[26px]"
-				in:fade={{ duration: 50 }}
-				out:fade={{ duration: 50 }}
-				on:click={() => goto('/')}
-			>
-				<X class="text-muted-foreground" size="18"></X>
-			</button>
-		{/if} -->
 	</div>
 
-	<CustomLink href="/info">❓</CustomLink>
+	<CustomLink href="/info">ℹ️</CustomLink>
 	<CustomLink href="/random">🔀</CustomLink>
 </div>
 
@@ -126,13 +116,13 @@
 
 <div class="flex flex-wrap gap-2 my-2" data-sveltekit-preload-code="viewport">
 	{#each elements as element}
-		<CustomLink href={`/${element.name}`} on:click={() => goto(`?q=${search}`)}>
+		<CustomLink href={`/${element.name}`} firstNavigateTo={search}>
 			{element.emoji}
 			{element.name}
 		</CustomLink>
 	{/each}
 
 	{#if elements.length == 100}
-		<CustomLink href="/info">➕ Many more...</CustomLink>
+		<CustomLink href="/info" firstNavigateTo={search}>➕ Many more...</CustomLink>
 	{/if}
 </div>

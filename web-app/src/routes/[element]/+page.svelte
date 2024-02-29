@@ -59,7 +59,12 @@
 			recipes = [...recipes, recipe];
 
 			if (l == 1) {
-				graph.addNode(recipe.result.name + 0, 0, `${recipe.result.emoji} ${recipe.result.name}`);
+				graph.addNode(
+					recipe.result.name + 0,
+					0,
+					`${recipe.result.emoji} ${recipe.result.name}`,
+					tree[Math.floor(l / 2)]
+				);
 			}
 
 			const level = Math.floor(Math.log2(l + 2));
@@ -122,7 +127,7 @@
 <div class="flex flex-row justify-between space-x-2 font-medium">
 	<CustomLink href="/">⬅️ Search</CustomLink>
 	<div class="flex space-x-2">
-		<CustomLink href="/info">❓</CustomLink>
+		<CustomLink href="/info">ℹ️</CustomLink>
 		<CustomLink href="/random" reload>🔀</CustomLink>
 	</div>
 </div>

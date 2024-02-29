@@ -1,6 +1,15 @@
-<script>
+<script lang="ts">
 	import _ from 'lodash';
-	import { forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide } from 'd3-force';
+	import {
+		forceSimulation,
+		forceLink,
+		forceManyBody,
+		forceCenter,
+		forceCollide,
+		type Simulation,
+		type SimulationNodeDatum,
+		type SimulationLinkDatum
+	} from 'd3-force';
 	import { onMount } from 'svelte';
 	import { forceX, forceY, select, selectAll, zoom } from 'd3';
 
@@ -10,7 +19,7 @@
 	export let nodes = [];
 	export let links = [];
 
-	let simulation;
+	let simulation: Simulation<SimulationNodeDatum, SimulationLinkDatum<SimulationNodeDatum>>;
 	let z;
 
 	function ticked() {
@@ -21,8 +30,14 @@
 			nodes[0].y = height / 2;
 
 			z.scaleExtent([1, 1]).translateExtent([
-				[_.minBy(nodes, (n) => n.x).x - 50, _.minBy(nodes, (n) => n.y).y - 50],
-				[_.maxBy(nodes, (n) => n.x).x + 50, _.maxBy(nodes, (n) => n.y).y + 50]
+				[
+					Math.min(0, _.minBy(nodes, (n) => n.x).x - 50),
+					Math.min(0, _.minBy(nodes, (n) => n.y).y - 50)
+				],
+				[
+					Math.max(width, _.maxBy(nodes, (n) => n.x).x + 50),
+					Math.max(height, _.maxBy(nodes, (n) => n.y).y + 50)
+				]
 			]);
 		}
 	}
