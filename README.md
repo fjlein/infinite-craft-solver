@@ -1,11 +1,13 @@
-# infinite-craft-solver
+# infinite-craft-visualizer
 
-Generating crafting paths for [Infinite Craft](https://neal.fun/infinite-craft) by [Neal Agarwal](https://neal.fun).
+Visualize recipes in [Infinite Craft](https://neal.fun/infinite-craft) by [Neal Agarwal](https://neal.fun). Hosted at [icv.fjlein.com](https://icv.fjlein.com).
 
 ## recipe-generation
 
-The python code in this folder resolves recipes and stores them in a database.
+The python code that resolves recipes and stores them in a MongoDB.
 
 ## web-app
 
-🚧 under construction 🚧
+The code for the SvelteKit application.
+
+
