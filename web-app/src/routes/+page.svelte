@@ -72,7 +72,7 @@
 </script>
 
 <p class="mb-5 text-muted-foreground">
-	Find the shortest recipe in <a
+	Visualize recipes in <a
 		href="https://neal.fun/infinite-craft"
 		class="underline underline-offset-4">Infinite Craft</a
 	>.
@@ -101,6 +101,11 @@
 	<CustomLink href="/info">ℹ️</CustomLink>
 	<CustomLink href="/random">🔀</CustomLink>
 </div>
+
+<svelte:head>
+	<title>Infinite Craft Visualizer</title>
+	<meta name="description" content="Visualize recipes in Infinite Craft." />
+</svelte:head>
 
 {#if elements.length == 0}
 	<div class="flex flex-wrap gap-2 my-2 font-medium">

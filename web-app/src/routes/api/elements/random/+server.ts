@@ -32,7 +32,5 @@ export const GET: RequestHandler = async () => {
 
 	await cursor.close();
 
-	console.log(element);
-
 	return json(element);
 };

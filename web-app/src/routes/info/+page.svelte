@@ -7,6 +7,11 @@
 	// export let data: PageData;
 </script>
 
+<svelte:head>
+	<title>Info - Infinite Craft Visualizer</title>
+	<meta name="description" content="Get more infp about this project." />
+</svelte:head>
+
 <p class="mb-5 text-muted-foreground">Get more info about this project.</p>
 
 <div class="flex flex-row justify-between space-x-2 font-medium">

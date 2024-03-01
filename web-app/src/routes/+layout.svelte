@@ -10,7 +10,7 @@
 	<div class="flex flex-col justify-between min-h-[100vh] mx-4">
 		<div class="mt-10">
 			<div class="mb-1 md:mt-10">
-				<h1 class="text-4xl font-semibold"><a href="/">Infinite Craft Solver</a></h1>
+				<h1 class="text-3xl font-semibold"><a href="/">Infinite Craft Visualizer</a></h1>
 			</div>
 			<slot />
 		</div>
@@ -20,10 +20,16 @@
 		</div>
 	</div>
 
-	<div class="h-[10vh]">
+	<div class="h-[10vh] flex justify-between mx-4">
 		<p class="text-muted-foreground text-center">
 			Made with ❤️ by <a href="https://github.com/fjlein" class="underline underline-offset-4"
 				>fjlein</a
+			>
+		</p>
+		<p class="text-muted-foreground text-center">
+			Code on <a
+				href="https://github.com/fjlein/infinite-craft-visualizer"
+				class="underline underline-offset-4">GitHub</a
 			>
 		</p>
 	</div>

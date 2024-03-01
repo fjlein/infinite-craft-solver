@@ -6,7 +6,5 @@ export const load = (async ({ fetch }) => {
 
 	const element = await res.json();
 
-	console.log(element);
-
 	throw redirect(307, `/${element.name}`);
 }) satisfies PageServerLoad;

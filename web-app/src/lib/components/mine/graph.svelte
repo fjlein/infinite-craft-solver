@@ -1,3 +1,8 @@
+<!-- This File is a crazy mess.
+I'm just happy this code somehow works.
+The typing is bad, I know.
+I'm sorry. -->
+
 <script lang="ts">
 	import _ from 'lodash';
 	import {
@@ -16,10 +21,22 @@
 	let width = 400;
 	let height = 500;
 
-	export let nodes = [];
-	export let links = [];
+	interface ND extends SimulationNodeDatum {
+		source: ND | null;
+		target: ND | null;
+		id: string;
+		text: string;
+	}
 
-	let simulation: Simulation<SimulationNodeDatum, SimulationLinkDatum<SimulationNodeDatum>>;
+	interface LD extends SimulationLinkDatum<ND> {
+		source: ND;
+		target: ND;
+	}
+
+	export let nodes: ND[] = [];
+	export let links: LD[] = [];
+
+	let simulation: Simulation<ND, LD>;
 	let z;
 
 	function ticked() {
@@ -29,17 +46,26 @@
 			nodes[0].x = width / 2;
 			nodes[0].y = height / 2;
 
-			z.scaleExtent([1, 1]).translateExtent([
-				[
-					Math.min(0, _.minBy(nodes, (n) => n.x).x - 50),
-					Math.min(0, _.minBy(nodes, (n) => n.y).y - 50)
-				],
-				[
-					Math.max(width, _.maxBy(nodes, (n) => n.x).x + 50),
-					Math.max(height, _.maxBy(nodes, (n) => n.y).y + 50)
-				]
-			]);
+			nodes.forEach((node) => {
+				if (node.id == 'tmp') {
+					node.x = (node.source!.x! + node.target!.x!) / 2;
+					node.y = (node.source!.y! + node.target!.y!) / 2;
+				}
+			});
 		}
+	}
+
+	function ending(e) {
+		z.scaleExtent([1, 1]).translateExtent([
+			[
+				Math.min(0, _.minBy(nodes, (n) => n.x).x - 50),
+				Math.min(0, _.minBy(nodes, (n) => n.y).y - 50)
+			],
+			[
+				Math.max(width, _.maxBy(nodes, (n) => n.x).x + 50),
+				Math.max(height, _.maxBy(nodes, (n) => n.y).y + 50)
+			]
+		]);
 	}
 
 	function zoomed(e) {
@@ -48,38 +74,61 @@
 	}
 
 	onMount(() => {
-		z = zoom().on('zoom', zoomed);
+		z = zoom().scaleExtent([1, 1]).on('zoom', zoomed);
 		select('svg rect').call(z);
 		simulation = forceSimulation(nodes)
 			.force(
 				'link',
 				forceLink(links)
 					.id((d) => d.id)
-					.distance(80)
-					.strength(11)
+					.distance(40)
+				// .strength(1)
 			)
-			.force('charge', forceManyBody().strength(-200))
-			.force('collide', forceCollide(80).strength(0.7))
-			.on('tick', ticked);
+			.force('charge', forceManyBody().strength(-5))
+			.force('collide', forceCollide(40).strength(0.7))
+			// .alpha(0.5)
+			.on('tick', ticked)
+			.on('end', ending);
 	});
 
-	export function addLink(from, to) {
+	export function addLink(from: string, to: string) {
 		links.push({ source: from, target: to });
 		simulation.force(
 			'link',
 			forceLink(links).id((d) => d.id)
 		);
+		const last = links[links.length - 1];
+		const source = last.source as ND;
+		const target = last.target as ND;
+		nodes.push({
+			x: (source.x! + target.x!) / 2,
+			y: (source.y! + target.y!) / 2,
+			id: 'tmp',
+			source: source,
+			target: target,
+			text: ''
+		});
 	}
 
-	export function addNode(name, level, text, parent) {
+	export function addNode(id: string, text: string, parent: string) {
 		const parent_node = _.find(nodes, (n) => n.id == parent) ?? { x: width / 2, y: height / 2 };
-		const vector = [parent_node.x - width / 2, parent_node.y - height / 2];
+		const vector = [parent_node.x! - width / 2, parent_node.y! - height / 2];
 		const vector_length = Math.sqrt(Math.pow(vector[0], 2) + Math.pow(vector[1], 2));
 		const vector_norm = [vector[0] * (1 / vector_length), vector[1] * (1 / vector_length)];
-		const new_x = parent_node.x + vector_norm[0] * 100;
-		const new_y = parent_node.y + vector_norm[1] * 100;
-		nodes.push({ id: name, text: text, level: level, x: new_x, y: new_y });
-		simulation.nodes(nodes).alpha(0.2).restart();
+		let new_x = parent_node.x! + vector_norm[0] * 80;
+		let new_y = parent_node.y! + vector_norm[1] * 80;
+
+		if (nodes.length == 1) {
+			new_x = width / 2;
+			new_y = height / 2 + 100;
+		} else if (nodes.length == 2) {
+			new_x = width / 2;
+			new_y = height / 2 - 100;
+		} else {
+		}
+
+		nodes.push({ id: id, text: text, x: new_x, y: new_y, source: null, target: null });
+		simulation.nodes(nodes).alpha(0.01).restart();
 	}
 </script>
 
@@ -121,8 +170,13 @@
 
 		{#each nodes as point, i}
 			<g>
-				<text x={point.x - 5} y={point.y + 5} text-anchor={'middle'} pointer-events={'none'}
-					>{point.text}</text
+				<text
+					x={point.x - 5}
+					y={point.y + 5}
+					text-anchor={'middle'}
+					pointer-events={'none'}
+					font-weight={i == 0 ? 'bold' : 'normal'}
+					class="select-none">{point.text}</text
 				>
 			</g>
 		{/each}

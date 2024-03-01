@@ -61,32 +61,27 @@
 			if (l == 1) {
 				graph.addNode(
 					recipe.result.name + 0,
-					0,
 					`${recipe.result.emoji} ${recipe.result.name}`,
-					tree[Math.floor(l / 2)]
+					tree[Math.floor(l / 2)]!
 				);
 			}
 
-			const level = Math.floor(Math.log2(l + 2));
-
 			graph.addNode(
 				recipe.first.name + l,
-				level,
 				`${recipe.first.emoji} ${recipe.first.name}`,
-				tree[Math.floor(l / 2)]
+				tree[Math.floor(l / 2)]!
 			);
 			graph.addNode(
 				recipe.second.name + (l + 1),
-				level,
 				`${recipe.second.emoji} ${recipe.second.name}`,
-				tree[Math.floor(l / 2)]
+				tree[Math.floor(l / 2)]!
 			);
 
 			tree.push(recipe.first.name + l);
-			graph.addLink(tree[Math.floor(l / 2)], recipe.first.name + l);
+			graph.addLink(tree[Math.floor(l / 2)]!, recipe.first.name + l);
 
 			tree.push(recipe.second.name + (l + 1));
-			graph.addLink(tree[Math.floor(l / 2)], recipe.second.name + (l + 1));
+			graph.addLink(tree[Math.floor(l / 2)]!, recipe.second.name + (l + 1));
 
 			toResolve.push(recipe.first.name, recipe.second.name);
 			await new Promise((r) => setTimeout(r, 200));
@@ -111,6 +106,14 @@
 
 	let graph: Graph;
 </script>
+
+<svelte:head>
+	<title>{data.element.emoji} {data.element.name} Recipe - Infinite Craft Visualizer</title>
+	<meta
+		name="description"
+		content="Visualize the recipe for {data.element.name} in Infinite Craft."
+	/>
+</svelte:head>
 
 <div class="flex items-center mb-5 space-x-1">
 	<p class="text-muted-foreground">
