@@ -127,14 +127,17 @@
 	{/if}
 </div>
 
-<div class="flex flex-row justify-between space-x-2 font-medium">
-	<CustomLink href="/">⬅️ Search</CustomLink>
-	<div class="flex space-x-2">
-		<CustomLink href="/info">ℹ️</CustomLink>
-		<CustomLink href="/random" reload>🔀</CustomLink>
+<div class="flex flex-col grow">
+	<div class="flex flex-row justify-between space-x-2 font-medium">
+		<CustomLink href="/">⬅️ Search</CustomLink>
+		<div class="flex space-x-2">
+			<CustomLink href="/info">ℹ️</CustomLink>
+			<CustomLink href="/random" reload>🔀</CustomLink>
+		</div>
+	</div>
+
+	<div class="mt-5 border shadow-sm rounded-md grow flex-col flex">
+		<Graph bind:this={graph}></Graph>
 	</div>
 </div>
-
-<div class="mt-2 border shadow-sm rounded-md">
-	<Graph bind:this={graph}></Graph>
-</div>
+<!-- <div class="bg-red-50 shrink-0 h-auto"></div> -->

@@ -29,7 +29,7 @@
 	</button>
 </div>
 
-<Accordion.Root class="w-full bg-white border rounded-md mt-2 px-2 shadow-sm divide-y" multiple>
+<Accordion.Root class="w-full bg-white border rounded-md mt-5 px-2 shadow-sm divide-y" multiple>
 	<Accordion.Item value="item-1">
 		<Accordion.Trigger>🌍 Who created Infinite Craft?</Accordion.Trigger>
 		<Accordion.Content

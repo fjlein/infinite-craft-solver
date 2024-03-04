@@ -19,7 +19,7 @@ I'm sorry. -->
 	import { forceX, forceY, select, selectAll, zoom } from 'd3';
 
 	let width = 400;
-	let height = 500;
+	let height = 100;
 
 	interface ND extends SimulationNodeDatum {
 		source: ND | null;
@@ -132,8 +132,8 @@ I'm sorry. -->
 	}
 </script>
 
-<div bind:clientWidth={width} bind:clientHeight={height} class="cursor-grab">
-	<svg {width} {height}>
+<div bind:clientWidth={width} bind:clientHeight={height} class="grow">
+	<svg {height} {width}>
 		<defs>
 			<marker
 				id="arrow"
