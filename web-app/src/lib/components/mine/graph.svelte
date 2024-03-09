@@ -132,53 +132,55 @@ I'm sorry. -->
 	}
 </script>
 
-<div bind:clientWidth={width} bind:clientHeight={height} class="grow">
-	<svg {height} {width}>
-		<defs>
-			<marker
-				id="arrow"
-				viewBox="0 0 10 10"
-				refX="5"
-				refY="5"
-				markerWidth="10"
-				markerHeight="10"
-				orient="auto-start-reverse"
-				fill={'#cccccc'}
-			>
-				<path d="M 0 0 L 10 5 L 0 10 z" />
-			</marker>
-		</defs>
-		<rect {width} {height} fill={'none'} pointer-events={'all'}></rect>
-		{#each links as link}
-			<line
-				x1={link.source.x}
-				y1={link.source.y}
-				x2={(link.target.x + link.source.x) / 2}
-				y2={(link.target.y + link.source.y) / 2}
-				stroke={'#dddddd'}
-				stroke-dasharray={'3 3'}
-			></line>
-			<line
-				x2={link.target.x}
-				y2={link.target.y}
-				x1={(link.target.x + link.source.x) / 2}
-				y1={(link.target.y + link.source.y) / 2}
-				stroke={'#dddddd'}
-				marker-start={`url(#arrow)`}
-			></line>
-		{/each}
-
-		{#each nodes as point, i}
-			<g>
-				<text
-					x={point.x - 5}
-					y={point.y + 5}
-					text-anchor={'middle'}
-					pointer-events={'none'}
-					font-weight={i == 0 ? 'bold' : 'normal'}
-					class="select-none">{point.text}</text
+<div class="mt-5 border shadow-sm rounded-md grow flex-col flex">
+	<div bind:clientWidth={width} bind:clientHeight={height} class="grow">
+		<svg {height} {width}>
+			<defs>
+				<marker
+					id="arrow"
+					viewBox="0 0 10 10"
+					refX="5"
+					refY="5"
+					markerWidth="10"
+					markerHeight="10"
+					orient="auto-start-reverse"
+					fill={'#cccccc'}
 				>
-			</g>
-		{/each}
-	</svg>
+					<path d="M 0 0 L 10 5 L 0 10 z" />
+				</marker>
+			</defs>
+			<rect {width} {height} fill={'none'} pointer-events={'all'}></rect>
+			{#each links as link}
+				<line
+					x1={link.source.x}
+					y1={link.source.y}
+					x2={(link.target.x + link.source.x) / 2}
+					y2={(link.target.y + link.source.y) / 2}
+					stroke={'#dddddd'}
+					stroke-dasharray={'3 3'}
+				></line>
+				<line
+					x2={link.target.x}
+					y2={link.target.y}
+					x1={(link.target.x + link.source.x) / 2}
+					y1={(link.target.y + link.source.y) / 2}
+					stroke={'#dddddd'}
+					marker-start={`url(#arrow)`}
+				></line>
+			{/each}
+
+			{#each nodes as point, i}
+				<g>
+					<text
+						x={point.x - 5}
+						y={point.y + 5}
+						text-anchor={'middle'}
+						pointer-events={'none'}
+						font-weight={i == 0 ? 'bold' : 'normal'}
+						class="select-none">{point.text}</text
+					>
+				</g>
+			{/each}
+		</svg>
+	</div>
 </div>

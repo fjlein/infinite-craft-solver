@@ -136,8 +136,6 @@
 		</div>
 	</div>
 
-	<div class="mt-5 border shadow-sm rounded-md grow flex-col flex">
-		<Graph bind:this={graph}></Graph>
-	</div>
+	<Graph bind:this={graph}></Graph>
 </div>
 <!-- <div class="bg-red-50 shrink-0 h-auto"></div> -->
